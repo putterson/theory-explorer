@@ -2,84 +2,105 @@ function drawBoard(){
 	var nfrets = 14;
 	var nstrings = 6;
 	
-	var c = document.getElementById("fretBoard");
-	var ctx = c.getContext("2d");
-	var cwidth  = c.width;
-	var cheight = c.height;
-	var lpad = c.width * .05;
-	var rpad = c.width * .05;
-	var tpad = c.height* .20;
-	var bpad = c.height* .10;
+	var canvas_fret = document.getElementById("fretBoard");
+	var canvas_note = document.getElementById("noteBoard");
+	var ctx_fret = canvas_fret.getContext("2d");
+	var ctx_note = canvas_note.getContext("2d");
+	
+	//These are applicable to both the noteBoard and fretBoard as they should be the same size
+	var cwidth  = canvas_fret.width;
+	var cheight = canvas_fret.height;
+	var lpad = canvas_fret.width * .05;
+	var rpad = canvas_fret.width * .05;
+	var tpad = canvas_fret.height* .20;
+	var bpad = canvas_fret.height* .10;
 	var bwidth  = cwidth  - lpad - rpad;
 	var bheight = cheight - tpad - bpad;
 	
-	var strokecolor = "#555555";
-	var fillcolor = "#555555";
-	var markercolor = "#999999";
-	var markerstroke = "#FFFFFF";
+	//Some canvas drawing parameters
+	var c_stroke = "#555555";
+	var c_fill = "#555555";
+	var c_marker = "#999999";
+	var c_markerstroke = "#FFFFFF";
+	var c_string = "#111111";
+	var strokewidth = 1;
+	var stringwidth = 0.4;
 	
 	function align(x){
 			return x - (x % 1) + 0.5;
 	}
 	
+	//draw a fretmarker
 	function fretmarker(x,y){
 		x = align(x);
 		y = align(y);
 		
-		ctx.fillStyle = markercolor;
-		ctx.strokeStyle = markerstroke;
+		ctx_fret.fillStyle = c_marker;
+		ctx_fret.strokeStyle = c_markerstroke;
 		
-		var size = bwidth * 0.005;
-		ctx.beginPath();
-		ctx.arc( x, y, size, 0, 2*Math.PI);
-		ctx.closePath();
-		ctx.fill();
+		var size = bheight * 0.05;
+		ctx_fret.beginPath();
+		ctx_fret.arc( x, y, size, 0, 2*Math.PI);
+		ctx_fret.closePath();
+		ctx_fret.fill();
 		
-		ctx.fillStyle = fillcolor;
-		ctx.strokeStyle = strokecolor;
+		ctx_fret.fillStyle = c_fill;
+		ctx_fret.strokeStyle = c_stroke;
 	}
 	
-	//draw the nut
-	ctx.fillStyle = fillcolor;
-	ctx.fillRect(lpad-3 , tpad , 3, bheight);
-	
-	ctx.strokeStyle = strokecolor;
-	ctx.font="10px Monospace";
+	//draw the string lines~
+	function draw_strings(){
+		ctx_fret.strokeStyle = c_string;
+		for (var x=0; x<nstrings; x++)
+		{
+			ctx_fret.lineWidth = 1 + (x*stringwidth);
+			ctx_fret.beginPath();
+			ctx_fret.moveTo( align(lpad) , align((x*(bheight/(nstrings - 1))) + tpad) );
+			ctx_fret.lineTo( align(lpad + bwidth) , align((x*(bheight/(nstrings - 1))) + tpad) );
+			ctx_fret.closePath();
+			ctx_fret.stroke();
+		}
+		ctx_fret.linewidth = strokewidth;
+		ctx_fret.strokeStyle = c_stroke;
+	}
 	
 	//draw the fret lines and numbers and markers
-	var x=0;
-	for (var i=x; i<(nfrets + 1); i++)
-	{
-		x = align((i*(bwidth/nfrets)) + lpad);
+	function draw_frets(){
+		var x=0;
+		for (var i=x; i<(nfrets + 1); i++)
+		{
+			x = align((i*(bwidth/nfrets)) + lpad);
 
-		if (i > 1 && i % 2 == 1 && (i+1) % 12 != 0 && (i-1) % 12 != 0){
-			fretmarker(x - (bwidth/nfrets/2), tpad + (bheight/2))
-		} else if (i > 1 && i % 12 == 0){
-			fretmarker(x - (bwidth/nfrets/2), tpad + (bheight*(1/3)));
-			fretmarker(x - (bwidth/nfrets/2), tpad + (bheight*(2/3)));
+			if (i > 1 && i % 2 == 1 && (i+1) % 12 != 0 && (i-1) % 12 != 0){
+				fretmarker(x - (bwidth/nfrets/2), tpad + (bheight/2))
+			} else if (i > 1 && i % 12 == 0){
+				fretmarker(x - (bwidth/nfrets/2), tpad + (bheight*(1/3)));
+				fretmarker(x - (bwidth/nfrets/2), tpad + (bheight*(2/3)));
+			}
+			ctx_fret.beginPath();
+			ctx_fret.moveTo( x , align(tpad) );
+			ctx_fret.lineTo( x , align(tpad + bheight) );
+			ctx_fret.closePath();
+			ctx_fret.stroke();
+			
+			ctx_fret.fillText(i, x - 4, align(tpad) - 15);
 		}
-		ctx.beginPath();
-		ctx.moveTo( x , align(tpad) );
-		ctx.lineTo( x , align(tpad + bheight) );
-		ctx.closePath();
-		ctx.stroke();
-		
-		ctx.fillText(i, x - 4, align(tpad) - 15);
 	}
+
+	//draw the nut
+	ctx_fret.fillStyle = c_fill;
+	ctx_fret.fillRect(lpad-3 , tpad - 5 , 3, bheight + 10);
 	
-	//draw the string lines
-	for (var x=0; x<nstrings; x++)
-	{
-		ctx.moveTo( align(lpad) , align((x*(bheight/(nstrings - 1))) + tpad) );
-		ctx.lineTo( align(lpad + bwidth) , align((x*(bheight/(nstrings - 1))) + tpad) );
-		ctx.stroke();
-	}
+	ctx_fret.strokeStyle = c_stroke;
+	ctx_fret.font="10px Monospace";
 	
+	draw_frets();
+	draw_strings();
 
 }
 
-function resize_fretboard(){
-	canvas = document.getElementById("fretBoard");
+function resize_board(id){
+	canvas = document.getElementById(id);
 	if (canvas.width  != window.innerWidth)
 	{
 		canvas.width  = window.innerWidth;
@@ -87,11 +108,16 @@ function resize_fretboard(){
 
 	if (canvas.height != window.innerHeight)
 	{
-		canvas.height = window.innerHeight * .20;
+		if(window.innerHeight * .20 < 120){
+			canvas.height = 120;
+		} else {
+			canvas.height = window.innerHeight * .20;
+		}
 	}
 }
 
 function resize_theory(){
-	resize_fretboard();
+	resize_board("fretBoard");
+	resize_board("noteBoard");
 	drawBoard();
 }

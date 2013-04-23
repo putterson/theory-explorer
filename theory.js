@@ -1,5 +1,5 @@
 function drawBoard(){
-	var nfrets = 14;
+	var nfrets = 15;
 	var nstrings = 6;
 	
 	var canvas_fret = document.getElementById("fretBoard");
@@ -23,11 +23,63 @@ function drawBoard(){
 	var c_marker = "#999999";
 	var c_markerstroke = "#FFFFFF";
 	var c_string = "#111111";
+	var c_note = "#FFFFFF";
+	var c_note_active = "#73E6BF";
+	var c_note_selected = "#F385F3";
+	var c_notestroke = "#000000";
+	var c_text = "#000000";
 	var strokewidth = 1;
 	var stringwidth = 0.4;
 	
+	//Music Theory
+	var a_tuning =["E","A","D","G","B","E"];
+	var a_notes = new Array("A","A♯","B","C","C♯","D","D♯","E","F","F♯","G","G♯");
+	var a_Em_pentatonic = ["E","G","A","B","D"]
+	
 	function align(x){
 			return x - (x % 1) + 0.5;
+	}
+	
+	//draw the note names
+	function draw_notes(){
+		var n_start = 0;
+		var n_note = 0;
+		var x = 0;
+		var y = 0;
+		for(var s=nstrings-1; s >= 0; s--){
+			start = a_notes.indexOf(a_tuning[a_tuning.length - s - 1]);
+			y = align((s*(bheight/(nstrings - 1))) + tpad);
+			
+			//handle fret 0 seperately
+			x = align((0*(bwidth/nfrets)) + lpad);
+			
+
+			
+			for(var f=0; f <= nfrets; f++){
+				x = align((f*(bwidth/nfrets)) + lpad);
+				if (f==0){ x -= 6; }
+				else { x -= 20; }
+				
+				if (a_Em_pentatonic.indexOf(a_notes[(start + f) % 12]) >= 0){
+					ctx_note.fillStyle = c_note_selected;
+				}else {
+					ctx_note.fillStyle = c_note_active;
+				}
+
+				ctx_note.strokeStyle = c_notestroke;
+				
+				ctx_note.beginPath();
+				ctx_note.arc(x+6,y, 9, 0, 2*Math.PI);
+				ctx_note.closePath();
+				ctx_note.stroke();
+				ctx_note.fill();
+				
+				ctx_note.fillStyle = c_text;
+				ctx_note.strokeStyle = c_text;
+				
+				ctx_note.fillText(a_notes[(start + f) % 12], x, y + 4);
+			}
+		}
 	}
 	
 	//draw a fretmarker
@@ -94,8 +146,11 @@ function drawBoard(){
 	ctx_fret.strokeStyle = c_stroke;
 	ctx_fret.font="10px Monospace";
 	
+	ctx_note.font="12px Sans Serif";
+	
 	draw_frets();
 	draw_strings();
+	draw_notes();
 
 }
 
@@ -108,8 +163,8 @@ function resize_board(id){
 
 	if (canvas.height != window.innerHeight)
 	{
-		if(window.innerHeight * .20 < 120){
-			canvas.height = 120;
+		if(window.innerHeight * .20 < 150){
+			canvas.height = 150;
 		} else {
 			canvas.height = window.innerHeight * .20;
 		}

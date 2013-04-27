@@ -4,14 +4,17 @@
 <meta charset="utf-8">
 <link rel="stylesheet" type="text/css" href="theory.css">
 </head>
-<body onresize="resize_theory()" onload="resize_theory()">
+<body>
 
+<div id="svgContainer" width=100% height=100%>
 <canvas id="fretBoard" width=100% height=20% style="position: absolute; left:0 top:0; z-index:0;">
 Your browser does not support the HTML5 canvas tag.
 </canvas>
-<canvas id="noteBoard" width=100% height=20% style="position: absolute; left:0 top:0; z-index:0;">
+<canvas id="noteBoard" width=100% height=20% style="position: absolute; left:0 top:0; z-index:1;">
 Your browser does not support the HTML5 canvas tag.
 </canvas>
+</div>
+
 
 <script src="theory.js"></script>
 

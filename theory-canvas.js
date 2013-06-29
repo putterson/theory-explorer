@@ -37,7 +37,7 @@ function Board(fb,nb){
 	//Music Theory
 	var a_tuning =["E","A","D","G","B","E"];
 	var a_notes = new Array("A","A♯","B","C","C♯","D","D♯","E","F","F♯","G","G♯");
-	var a_Em_pentatonic = ["E","G","A","B","D"]
+	var a_Em_pentatonic = ["A","B","C","D","E","F","G"]
 	
 	function resize(){
 		cwidth  = canvas_fret.width;

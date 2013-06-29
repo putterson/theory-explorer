@@ -6,10 +6,11 @@ function svgBoard(){
 	var svg;
 	var g_fret;
 	var g_note;
-	
+
 	//svg drawing elements
 	var strings;
 	var frets;
+	var fretmarkers;
 	var fretnums;
 	var nut;
 	
@@ -30,15 +31,27 @@ function svgBoard(){
 	var bheight;
 	
 	function alignx(x){
-			return x - (x % 1);
+		return x - (x % 1);
 	}
 	this.alignon = alignx;
 	
 	function aligny(x){
-			return x - (x % 1) + 0.5;
+		return x - (x % 1) + 0.5;
 	}
 	this.alignin = aligny;
 	
+	//accept a function and an iteration
+	//the function should accept an svg element and return one
+	function fretMarkerPos(i,f){
+		fx = aligny((i*(bwidth/nfrets)) + lpad - (bwidth/nfrets/2));
+		if (i > 1 && i % 2 == 1 && (i+1) % 12 != 0 && (i-1) % 12 != 0){
+			fretmarkers[i] = f( fretmarkers[i], fx, tpad + (bheight/2) );
+		} else if (i > 1 && i % 12 == 0){
+			fretmarkers[i+"t"] = f( fretmarkers[i+"t"], fx, tpad + (bheight*(1/3)) );
+			fretmarkers[i+"b"] = f( fretmarkers[i+"b"], fx, tpad + (bheight*(2/3)) );
+		}
+
+	}
 	
 	//populate all persistent objects
 	function construct(){
@@ -102,6 +115,7 @@ function svgBoard(){
 			g_fret.removeChild(g_fret.lastChild);
 		}
 		frets = new Array();
+		fretmarkers = {};
 		
 		//create nut seperately
 		var rect;
@@ -112,14 +126,27 @@ function svgBoard(){
 		var line;
 		var x;
 		
+		//create both frets and fret markers
 		for (var i=0; i<=nfrets; i++)
 		{
 			line = document.createElementNS(xmlns, "line");
+
+			fretMarkerPos(i,function(elem){
+				var size = bheight * 0.05;
+				elem = document.createElementNS(xmlns, "circle");
+				elem.setAttribute("r", size);
+				elem.setAttribute("fill", "black");
+				g_fret.appendChild(elem);
+				return elem;
+			});
+
 			frets[i] = line;
 			g_fret.appendChild(line);
 		}
 	}
-	
+
+
+
 	function resize_strings(){
 		for(var x=0; x < nstrings; x++){
 			strings[x].setAttribute("x1", alignx(lpad) );
@@ -131,7 +158,8 @@ function svgBoard(){
 	}
 	
 	function resize_frets(){
-		if( frets.length < nfrets ){
+		//this handles both the creation of frets and fretmarkers
+		if( frets.length <= nfrets ){
 			create_frets();
 		}
 		var nutwidth = 4;
@@ -140,21 +168,32 @@ function svgBoard(){
 		nut.setAttribute("height", alignx(bheight + (nstrings*stringwidth)));
 		nut.setAttribute("width", nutwidth + 1 );
 		nut.setAttribute("style", "fill: black;");
-		
-		for (var i=0; i< frets.length; i++){
-			x = aligny((i*(bwidth/nfrets)) + lpad);
+		for (var i=0; i<frets.length; i++){
+			var x = aligny((i*(bwidth/nfrets)) + lpad);
 			frets[i].setAttribute("x1", x);
 			frets[i].setAttribute("y1", aligny(tpad));
 			frets[i].setAttribute("x2", x);
 			frets[i].setAttribute("y2", aligny(tpad + bheight));
+
 			if ( i <= nfrets ){
 				frets[i].setAttribute("style", "stroke-width: 1px; stroke: black;");
 			} else {
 				frets[i].setAttribute("style", "stroke-width: 1px; stroke: black; visibility: hidden");
 			}
+
+			fretMarkerPos(i,function(elem, x, y){
+				elem.setAttribute("cx", x);
+				elem.setAttribute("cy", y);
+				if ( i <= nfrets ){
+					elem.setAttribute("style", "");
+				} else {
+					elem.setAttribute("style", "visibility: hidden;");
+				}
+				return elem;
+			});
 		}
 	}
-	
+
 	this.resize = function(){
 		resize_params();
 		resize_strings();
@@ -187,12 +226,12 @@ function resize_board(id){
 
 function load_theory(){
 	this.svgboard = new svgBoard();
-	resize_theory();
+//	resize_theory();
 }
 
 function resize_theory(){
-	resize_board("fretBoard");
-	resize_board("noteBoard");
+//	resize_board("fretBoard");
+//	resize_board("noteBoard");
 	resize_board("svgBoard");
 	svgboard.resize();
 }

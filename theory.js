@@ -13,9 +13,20 @@ function svgBoard(){
 	var fretmarkers;
 	var fretnums;
 	var nut;
+
+	//element parameters
+	var c_stroke = "#555555";
+	var c_fill = "#555555";
+	var c_marker = "#999999";
+	var c_note = "#FFFFFF";
+	var c_note_active = "#73E6BF";
+	var c_note_selected = "#F385F3";
+	var c_notestroke = "#000000";
+	var c_text = "#000000";
+	var s_font = 10;
 	
 	
-	//params
+	//params (these intial values will be overwritten by resize)
 	var nfrets = 15;
 	var nstrings = 6;
 	var stringwidth = 0.4;
@@ -40,18 +51,6 @@ function svgBoard(){
 	}
 	this.alignin = aligny;
 	
-	//accept a function and an iteration
-	//the function should accept an svg element and return one
-	function fretMarkerPos(i,f){
-		fx = aligny((i*(bwidth/nfrets)) + lpad - (bwidth/nfrets/2));
-		if (i > 1 && i % 2 == 1 && (i+1) % 12 != 0 && (i-1) % 12 != 0){
-			fretmarkers[i] = f( fretmarkers[i], fx, tpad + (bheight/2) );
-		} else if (i > 1 && i % 12 == 0){
-			fretmarkers[i+"t"] = f( fretmarkers[i+"t"], fx, tpad + (bheight*(1/3)) );
-			fretmarkers[i+"b"] = f( fretmarkers[i+"b"], fx, tpad + (bheight*(2/3)) );
-		}
-
-	}
 	
 	//populate all persistent objects
 	function construct(){
@@ -110,12 +109,14 @@ function svgBoard(){
 		}
 	}
 	
+	//create frets, fret markers, fret numbers
 	function create_frets(){
 		while (g_fret.lastChild) {
 			g_fret.removeChild(g_fret.lastChild);
 		}
 		frets = new Array();
 		fretmarkers = {};
+		fretnums = new Array();
 		
 		//create nut seperately
 		var rect;
@@ -124,24 +125,28 @@ function svgBoard(){
 		g_fret.appendChild(rect);
 		
 		var line;
-		var x;
 		
-		//create both frets and fret markers
-		for (var i=0; i<=nfrets; i++)
-		{
+		for (var i=0; i<=nfrets; i++){
 			line = document.createElementNS(xmlns, "line");
+			frets[i] = line;
+			g_fret.appendChild(line);
 
 			fretMarkerPos(i,function(elem){
-				var size = bheight * 0.05;
 				elem = document.createElementNS(xmlns, "circle");
-				elem.setAttribute("r", size);
-				elem.setAttribute("fill", "black");
+				elem.setAttribute("fill", c_marker);
 				g_fret.appendChild(elem);
 				return elem;
 			});
 
-			frets[i] = line;
-			g_fret.appendChild(line);
+			fretNumberPos(i,function(elem){
+				elem = document.createElementNS(xmlns, "text");
+				elem.textContent=i;
+				elem.setAttribute("fill", c_text);
+				elem.setAttribute("font-family", "Monospace");
+				elem.setAttribute("font-size", s_font);
+				g_fret.appendChild(elem);
+				return elem;
+			});
 		}
 	}
 
@@ -158,7 +163,7 @@ function svgBoard(){
 	}
 	
 	function resize_frets(){
-		//this handles both the creation of frets and fretmarkers
+		//this removes frets, markers and numbers 
 		if( frets.length <= nfrets ){
 			create_frets();
 		}
@@ -182,16 +187,43 @@ function svgBoard(){
 			}
 
 			fretMarkerPos(i,function(elem, x, y){
+				elem.setAttribute("r", bheight * 0.05 );
 				elem.setAttribute("cx", x);
 				elem.setAttribute("cy", y);
-				if ( i <= nfrets ){
-					elem.setAttribute("style", "");
-				} else {
-					elem.setAttribute("style", "visibility: hidden;");
-				}
+				if ( i <= nfrets ){ elem.setAttribute("style", ""); }
+				else { elem.setAttribute("style", "visibility: hidden;"); }
+				return elem;
+			});
+
+			fretNumberPos(i,function(elem, x, y){
+				elem.setAttribute("x", x);
+				elem.setAttribute("y", y);
+				if ( i <= nfrets ){ elem.setAttribute("style", ""); }
+				else { elem.setAttribute("style", "visibility: hidden;"); }
 				return elem;
 			});
 		}
+	}
+
+	//accept a function and an iteration number
+	//the function should accept an svg element and return one
+	function fretMarkerPos(i,f){
+		x = aligny((i*(bwidth/nfrets)) + lpad - (bwidth/nfrets/2));
+		if (i > 1 && i % 2 == 1 && (i+1) % 12 != 0 && (i-1) % 12 != 0){
+			fretmarkers[i] = f( fretmarkers[i], x, tpad + (bheight/2) );
+		} else if (i > 1 && i % 12 == 0){
+			fretmarkers[i+"t"] = f( fretmarkers[i+"t"], x, tpad + (bheight*(1/3)) );
+			fretmarkers[i+"b"] = f( fretmarkers[i+"b"], x, tpad + (bheight*(2/3)) );
+		}
+
+	}
+
+	//accept a function and an iteration number
+	//the function should accept an svg element and return one
+	function fretNumberPos(i,f){
+		if ( i == 0 ) { x = aligny((i*(bwidth/nfrets)) + lpad - (s_font/2)); }
+		else { x = aligny((i*(bwidth/nfrets)) + lpad - (bwidth/nfrets/2) - (s_font/2)); }
+		fretnums[i] = f( fretnums[i], x, alignx(tpad) - 15);
 	}
 
 	this.resize = function(){

@@ -258,10 +258,7 @@ function fretBoard(){
 
 	this.update_notes = function(f){
 		forAllNotes(
-			notePos.curry(function(elem){
-				textelem.textContent = "A♯";
-				return elem;
-			})
+			notePos.curry(f)
 		);
 	}
 
@@ -333,4 +330,19 @@ function fretBoard(){
 	
 	construct();
 	this.resize();
+}
+
+
+
+Function.prototype.curry = function() {
+    if (arguments.length<1) {
+        return this; //nothing to curry with - return function
+    }
+    var that = this;
+    var slice = Array.prototype.slice;
+    var args = slice.apply(arguments);
+    return function() {
+        var innerFunctionSlice = slice.apply(arguments);
+        return that.apply(null, args.concat(slice.apply(arguments)));
+    }
 }

@@ -1,31 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="theory.css">
-<script src="fretBoard.js"></script>
-<script src="ctrlPanel.js"></script>
-<script src="musicTheory.js"></script>
-<script src="loadTheory.js"></script>
+  <meta charset="utf-8">
+  <title>Theory Explorer</title>
+  <base target="_blank">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+  <script src="http://code.jquery.com/jquery-1.11.3.js"></script>
 </head>
+
 <body>
-
-<div id="svgContainer" width=100% height=100%>
-
-<!--
-<canvas id="fretBoard" width=100% height=20% style="position: absolute; left:0 top:0; z-index:0;">
-Your browser does not support the HTML5 canvas tag.
-</canvas>
-<canvas id="noteBoard" width=100% height=20% style="position: absolute; left:0 top:0; z-index:1;">
-Your browser does not support the HTML5 canvas tag.
-</canvas>
--->
-
-</div>
-
-<div id="ctrlContainer">
-
-</div>
-
+  <h1>Theory Explorer</h1>
+  <div id="app-container"></div>
+  <script src="app.jsx" type="text/babel" ></script>
 </body>
 </html>

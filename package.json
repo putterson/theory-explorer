@@ -1,0 +1,21 @@
+{
+  "name": "TheoryExplorer",
+  "version": "0.1.0",
+  "main": "main.js",
+  "dependencies": {
+    "babel-register": "~6.3.13",
+    "babel-standalone": "~1.0.0",
+    "cli-color": "~1.1.0",
+    "js-yaml": "~3.4.6",
+    "react": "~0.14.5",
+    "react-ace": "^3.0.0",
+    "react-dom": "~0.14.5",
+    "react-iframe": "0.0.4",
+    "react-textarea-autosize": "^3.2.0"
+  },
+  "devDependencies": {
+    "browserify": "^12.0.1",
+    "electron-prebuilt": "~0.36.2",
+    "svg-to-jsx": "0.0.13"
+  }
+}

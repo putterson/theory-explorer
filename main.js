@@ -27,7 +27,7 @@ app.on("ready", function() {
 
   // load homepage
   var homepageUrl = "file://" + __dirname + "/index.html";
-  mainWindow.loadUrl(homepageUrl);
+  mainWindow.loadURL(homepageUrl);
 
   // open Chromium DevTools
    mainWindow.openDevTools();

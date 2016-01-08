@@ -1,6 +1,8 @@
 var React = require("react");
 var ReactDOM = require("react-dom");
 
+var Fretboard = require("./Fretboard");
+
 let App = React.createClass({
   getInitialState() {
       return {value: ""};
@@ -19,6 +21,9 @@ let App = React.createClass({
                 this.setState(this.state);
             }} /> 
         </div>
+	<Fretboard
+          appState={this.state}
+          setAppState={this.setAppState} />
     </div>;
   }
 });

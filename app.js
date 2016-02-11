@@ -4,6 +4,7 @@ var ReactDOM = require("react-dom");
 var _ = require("lodash");
 
 var Fretboard = require("./Fretboard");
+import Board from "./Board"
 
 let App = React.createClass({
     getInitialState() {
@@ -20,42 +21,43 @@ let App = React.createClass({
 		      { note: "A",
 			octave: 2 },
 		      { note: "E",
-			octave: 2 }]
-	};
-    },
+			octave: 2 }],
+	    frets: Board.getFrets(12)
+	    };
+	},
 
-    componentDidMount() {
-	window.addEventListener('resize', this.handleResize);
-    },
+	componentDidMount() {
+	    window.addEventListener('resize', this.handleResize);
+	},
 
-    handleResize() {
-	this.setAppState(this.state);
-    },
+	handleResize() {
+	    this.setAppState(this.state);
+	},
 
-    setAppState(partialState, callback) {
-	return this.setState(partialState, callback);
-    },
+	setAppState(partialState, callback) {
+	    return this.setState(partialState, callback);
+	},
 
 
-    render() {
-	return <div> 
-            <div> 
-            {"Value is " + this.state.value + "!"}
-        </div>
-            <div> 
-            <input 
-        type="text" 
-        key="myUniqueComponentIdentifier"
-        onChange={({target: {value}}) => {
-            this.state.value = value;
-            this.setState(this.state);
-        }} /> 
+	render() {
+	    return <div> 
+		<div> 
+		{"Value is " + this.state.value + "!"}
             </div>
-	    <Fretboard
-        appState={this.state}
-        setAppState={this.setAppState} />
-	    </div>;
-    }
-});
-ReactDOM.render(<App/>, document.getElementById("app-container"));
+		<div> 
+		<input 
+            type="text" 
+            key="myUniqueComponentIdentifier"
+            onChange={({target: {value}}) => {
+		this.state.value = value;
+		this.setState(this.state);
+            }} /> 
+		</div>
+		<Fretboard
+            appState={this.state}
+            setAppState={this.setAppState} />
+		</div>;
+	}
+    });
+			    ReactDOM.render(<App/>, document.getElementById("app-container"));
 

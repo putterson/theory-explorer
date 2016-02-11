@@ -7,6 +7,9 @@ app.on("window-all-closed", function() {
   // }
 })
 
+//Watch dir for changes and reload on changes
+require('electron-reload')(__dirname+"/bundle.js");
+
 // hold a global reference of the window object,
 // otherwise the window will be closed when this object is GCed
 var mainWindow = null;

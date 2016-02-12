@@ -21,7 +21,6 @@ fretboard.create = function(el, props, state) {
 
 fretboard.update = function(el, state, dispatcher) {
     var svg = d3.select(el).selectAll('.d3-fretboard');
-    console.log("d3-fretboard update");
     this._drawStrings(el, state.strings);
 };
 
@@ -31,8 +30,6 @@ fretboard._drawStrings = function(el, strings) {
     var width = el.offsetWidth;
     var height = el.offsetHeight;
 
-    console.log(width);
-    
     var stringwidth = 0.4;
 
     var lpad = 25;

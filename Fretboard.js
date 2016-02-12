@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var _ = require('lodash');
 
 var d3Fretboard = require('./d3Fretboard');
@@ -14,7 +15,7 @@ var Fretboard = React.createClass({
     dispatcher: null,
 
     componentDidMount: function() {
-	var el = this.getDOMNode();
+	var el = ReactDOM.findDOMNode(this);
 	var dispatcher = d3Fretboard.create(el, {
 	    width: this.props.width,
 	    height: this.props.height
@@ -23,8 +24,7 @@ var Fretboard = React.createClass({
     },
 
     componentDidUpdate: function(prevProps, prevState) {
-	var el = this.getDOMNode();
-	console.log("Fretboard update");
+	var el = ReactDOM.findDOMNode(this);
 	d3Fretboard.update(el, this.getFretboardState(), this.dispatcher);
 	
     },
@@ -50,7 +50,6 @@ var Fretboard = React.createClass({
     },
 
     handleResize: function() {
-	console.log("resize");	
     },
 
     showTooltip: function(d) {

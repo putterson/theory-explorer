@@ -24,7 +24,6 @@ var Fretboard = React.createClass({
 
     componentDidUpdate: function(prevProps, prevState) {
 	var el = this.getDOMNode();
-	console.log("Fretboard update");
 	d3Fretboard.update(el, this.getFretboardState(), this.dispatcher);
 	
     },
@@ -50,7 +49,6 @@ var Fretboard = React.createClass({
     },
 
     handleResize: function() {
-	console.log("resize");	
     },
 
     showTooltip: function(d) {

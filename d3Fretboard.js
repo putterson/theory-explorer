@@ -30,7 +30,7 @@ fretboard._drawStrings = function(el, strings) {
     var width = el.offsetWidth;
     var height = el.offsetHeight;
 
-    var stringwidth = 0.4;
+    var stringwidth = 0.5;
 
     var lpad = 25;
     var rpad = 25;
@@ -44,13 +44,20 @@ fretboard._drawStrings = function(el, strings) {
     var string = g.selectAll('line')
 	.data(strings);//, function(s) {return s.note+'-'+s.octave+'-'+width;});
 
+    var stringStyle = function(d,i) { 
+	var dashed = "";
+	if (i > 2) {
+	    dashed = "stroke-dasharray: 1.5,0.5;"
+	}						
+	return "stroke-width: " + (1 + (i*stringwidth)) + "px;" + "stroke: black;" + dashed}
+    
     //update existing strings
     string
 	.attr('x1', alignx(lpad))
 	.attr('y1', function(d,i) {return aligny(i*(bheight/(nstrings - 1)) + tpad)})
 	.attr('x2', function(d,i) {return alignx(lpad + bwidth) })
 	.attr('y2', function(d,i) {return aligny(i*(bheight/(nstrings - 1)) + tpad)})
-    	.attr('style', function(d,i) { return "stroke-width: " + (1 + (i*stringwidth)) + "px;" + "stroke: black;"});
+    	.attr('style', stringStyle);
 
     //add any new strings
     string.enter().append('line')
@@ -59,7 +66,7 @@ fretboard._drawStrings = function(el, strings) {
 	.attr('y1', function(d,i) {return aligny(i*(bheight/(nstrings - 1)) + tpad)})
 	.attr('x2', function(d,i) {return alignx(lpad + bwidth) })
 	.attr('y2', function(d,i) {return aligny(i*(bheight/(nstrings - 1)) + tpad)})
-    	.attr('style', function(d,i) { return "stroke-width: " + (1 + (i*stringwidth)) + "px;" + "stroke: black;"});
+    	.attr('style', stringStyle);
 
     //remove any extra strings
     string.exit().remove();

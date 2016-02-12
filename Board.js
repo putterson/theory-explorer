@@ -39,6 +39,15 @@ var tunings = [
 		{ note: "E",
 		  octave: 2 },
 		{ note: "B",
+		  octave: 2 }]},
+    { name: "Standard Bass",
+      strings: [{ note: "G",
+		  octave: 3 },
+		{ note: "D",
+		  octave: 3 },
+		{ note: "A",
+		  octave: 2 },
+		{ note: "E",
 		  octave: 2 }]}
 ]
 

@@ -49,30 +49,30 @@ var tunings = [
 		  octave: 2 },
 		{ note: "E",
 		  octave: 2 }]}
-]
+];
 
 export default {
     getFrets(n) {
-	var frets = []
+	var frets = [];
 	for(var i = 0; i <= n; i++){
-	    frets.push({n: i})
+	    frets.push({n: i});
 	}
-	return frets
+	return frets;
     },
 
     getDefaultTuning() {
-	return this.getTuning("Standard")
+	return this.getTuning("Standard");
     },
 
     getStrings(tuning) {
-	return tunings.filter( (value) => value.name === tuning.name )[0].strings
+	return tunings.filter( (value) => value.name === tuning.name )[0].strings;
     },
 
     getTunings() {
-	return tunings
+	return tunings;
     },
 
     getTuning(tuningName) {
-	return tunings.filter( (value) => value.name === tuningName )[0]
+	return tunings.filter( (value) => value.name === tuningName )[0];
     }
-}
+};

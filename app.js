@@ -12,7 +12,7 @@ let App = React.createClass({
 	return {
 	    tuning: default_tuning,
 	    strings: Board.getStrings(default_tuning),
-	    frets: Board.getFrets(12)
+	    frets: Board.getFrets(24)
 	};
     },
 

@@ -15,6 +15,9 @@ fretboard.create = function(el, props, state) {
 
     svg.append('g')
 	.attr('class', 'd3-frets');
+
+    svg.append('g')
+	.attr('class', 'd3-fret-numbers');
     
     var dispatcher = new EventEmitter();
     this.update(el, state, dispatcher);
@@ -45,6 +48,7 @@ fretboard.update = function(el, state, dispatcher) {
     var dimentions = this.getDimentions(el);
     this._drawStrings(el, dimentions, state.strings);
     this._drawFrets(el, dimentions, state.frets);
+    this._drawFretNumbers(el, dimentions, state.frets);
 };
 
 //dim is dimentions
@@ -141,6 +145,49 @@ fretboard._drawFrets = function(el, dim, frets) {
     	.attr('style', fretStyle);
 
     fret.exit().remove();
+};
+
+fretboard._drawFretNumbers = function(el, dim, frets) {
+    var g = d3.select(el).selectAll('.d3-fret-numbers');
+
+    var width = el.offsetWidth;
+    var height = el.offsetHeight;
+
+    var num = g.selectAll('text')
+	    .data(frets, function(f){return f.n;});
+
+    var fretPosition = function(d, i){
+	//https://en.wikipedia.org/wiki/Scale_length_(string_instruments)
+	//12throot(2) / (12throot(2) - 1)
+	var divisor = 17.817154;
+	
+	var stringwidth = dim.bwidth;
+	var pos = 0;
+	for(var n= 0; n<i; n++){
+	    pos += stringwidth / divisor;
+	    stringwidth = dim.bwidth - pos;
+	}
+	return (pos) + dim.lpad;
+    };
+
+    num
+	.attr("fill", "#000000")
+	.attr("font-family", "Monospace")
+	.attr("font-size", 10)
+	.attr("text-anchor", "middle")
+	.attr("x", fretPosition)
+	.attr("y", dim.tpad - 10)
+	.text(function(d,i) {return d.n;});
+
+    num.enter().append('text')
+    	.attr("fill", "#000000")
+	.attr("font-family", "Monospace")
+	.attr("font-size", 10)
+	.attr("text-anchor", "middle")
+    	.attr("x", fretPosition)
+	.attr("y", dim.tpad - 10)
+	.text(function(d,i) {return d.n;});
+
 };
 
 fretboard._drawPoints = function(el, scales, data, prevScales, dispatcher) {

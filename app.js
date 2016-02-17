@@ -29,9 +29,9 @@ let App = React.createClass({
     },
 
     setTuning(tuning) {
-	this.state.tuning = tuning
-	this.state.strings = Board.getStrings(tuning)
-	this.setState(this.state)
+	this.state.tuning = tuning;
+	this.state.strings = Board.getStrings(tuning);
+	this.setState(this.state);
     },
 
 
@@ -43,7 +43,7 @@ let App = React.createClass({
 	    <div> 
 	    <select value={this.state.tuning.name}
 	onChange={({target: {value}}) => {
-	    this.setTuning(Board.getTuning(value))
+	    this.setTuning(Board.getTuning(value));
         }}
 	    >
 	    {

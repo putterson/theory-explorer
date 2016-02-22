@@ -10,9 +10,11 @@ let App = React.createClass({
     getInitialState() {
 	var default_tuning = Board.getDefaultTuning()
 	return {
+	    viewhints: { fret_start: 5,
+			 fret_end: 22 },
 	    tuning: default_tuning,
 	    strings: Board.getStrings(default_tuning),
-	    frets: Board.getFrets(24)
+	    frets: Board.getFrets(0,22)
 	};
     },
 

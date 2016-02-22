@@ -25,31 +25,60 @@ fretboard.create = function(el, props, state) {
     return dispatcher;
 };
 
-fretboard.getDimentions = function(el) {
+fretboard.getDimentions = function(el, state) {
     var width = el.offsetWidth;
     var height = el.offsetHeight;
     var lpad = 25;
     var rpad = 25;
     var tpad = height* .20;
     var bpad = height* .10;
+    var viewhints= state.viewhints;
+    var bwidth = width  - lpad - rpad;
+    var bheight = height - tpad - bpad;
+
+    var getFretPosition = function(){
+	function calcFretPosition(i) {
+	    //https://en.wikipedia.org/wiki/Scale_length_(string_instruments)
+	    //12throot(2) / (12throot(2) - 1)
+	    var divisor = 17.817154;
+	    
+	    var stringwidth = bwidth;
+	    var pos = 0;
+	    for(var n= 0; n<i; n++){
+		pos += stringwidth / divisor;
+		stringwidth = bwidth - pos;
+	    }
+	    return pos;	
+	}
+
+	
+	return function(d,i){
+	    var start_position = calcFretPosition(viewhints.fret_start);
+	    var end_position = calcFretPosition(viewhints.fret_end);
+	    return (calcFretPosition(i) - start_position) / (end_position - start_position) * bwidth + lpad;
+	};
+    };
     
     return {
 	lpad: lpad,
 	rpad: rpad,
 	tpad: tpad,
 	bpad: bpad,
-	bwidth: width  - lpad - rpad,
-	bheight: height - tpad - bpad
+	bwidth: bwidth,
+	bheight: bheight,
+	getFretPosition: getFretPosition
     };
 };
 
 fretboard.update = function(el, state, dispatcher) {
     var svg = d3.select(el).selectAll('.d3-fretboard');
-    var dimentions = this.getDimentions(el);
+    var dimentions = this.getDimentions(el,state);
     this._drawStrings(el, dimentions, state.strings);
     this._drawFrets(el, dimentions, state.frets);
     this._drawFretNumbers(el, dimentions, state.frets);
 };
+
+
 
 //dim is dimentions
 fretboard._drawStrings = function(el, dim, strings) {
@@ -114,33 +143,21 @@ fretboard._drawFrets = function(el, dim, frets) {
 	return "stroke-width: "+width+"; stroke: black;";
     };
 
-    var fretPosition = function(d, i){
-	//https://en.wikipedia.org/wiki/Scale_length_(string_instruments)
-	//12throot(2) / (12throot(2) - 1)
-	var divisor = 17.817154;
-	
-	var stringwidth = dim.bwidth;
-	var pos = 0;
-	for(var n= 0; n<i; n++){
-	    pos += stringwidth / divisor;
-	    stringwidth = dim.bwidth - pos;
-	}
-	return (pos) + dim.lpad;
-    };
+
 
     //Update existing frets
     fret
-	.attr("x1", fretPosition)
+	.attr("x1", dim.getFretPosition())
     	.attr("y1", aligny(dim.tpad))
-	.attr("x2", fretPosition)
+	.attr("x2", dim.getFretPosition())
 	.attr("y2", aligny(dim.tpad+dim.bheight))
 	.attr('style', fretStyle);
 
     //Add any new frets
     fret.enter().append('line')
-	.attr("x1", fretPosition)
+	.attr("x1", dim.getFretPosition())
     	.attr("y1", aligny(dim.tpad))
-	.attr("x2", fretPosition)
+	.attr("x2", dim.getFretPosition())
 	.attr("y2", aligny(dim.tpad+dim.bheight))
     	.attr('style', fretStyle);
 
@@ -175,7 +192,7 @@ fretboard._drawFretNumbers = function(el, dim, frets) {
 	.attr("font-family", "Monospace")
 	.attr("font-size", 10)
 	.attr("text-anchor", "middle")
-	.attr("x", fretPosition)
+	.attr("x", dim.getFretPosition())
 	.attr("y", dim.tpad - 10)
 	.text(function(d,i) {return d.n;});
 
@@ -184,7 +201,7 @@ fretboard._drawFretNumbers = function(el, dim, frets) {
 	.attr("font-family", "Monospace")
 	.attr("font-size", 10)
 	.attr("text-anchor", "middle")
-    	.attr("x", fretPosition)
+    	.attr("x", dim.getFretPosition())
 	.attr("y", dim.tpad - 10)
 	.text(function(d,i) {return d.n;});
 

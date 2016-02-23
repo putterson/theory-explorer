@@ -8,9 +8,9 @@ var ANIMATION_DURATION = 500;
 
 fretboard.create = function(el, props, state) {
     var svg = d3.select(el).append('svg')
-	.attr('class', 'd3-fretboard')
-	.attr('width', props.width)
-	.attr('height', props.height);
+	    .attr('class', 'd3-fretboard')
+	    .attr('width', props.width)
+	    .attr('height', props.height);
     
     svg.append('g')
 	.attr('class', 'd3-strings');
@@ -229,7 +229,7 @@ fretboard._drawPoints = function(el, scales, data, prevScales, dispatcher) {
     var g = d3.select(el).selectAll('.d3-points');
 
     var point = g.selectAll('.d3-point')
-	.data(data, function(d) { return d.id; });
+	    .data(data, function(d) { return d.id; });
 
     point.enter().append('circle')
 	.attr('class', 'd3-point')
@@ -272,7 +272,7 @@ fretboard._drawTooltips = function(el, scales, tooltips, prevScales) {
     var g = d3.select(el).selectAll('.d3-tooltips');
 
     var tooltipRect = g.selectAll('.d3-tooltip-rect')
-	.data(tooltips, function(d) { return d.id; });
+	    .data(tooltips, function(d) { return d.id; });
 
     tooltipRect.enter().append('rect')
 	.attr('class', 'd3-tooltip-rect')
@@ -306,7 +306,7 @@ fretboard._drawTooltips = function(el, scales, tooltips, prevScales) {
     }
 
     var tooltipText = g.selectAll('.d3-tooltip-text')
-	.data(tooltips, function(d) { return d.id; });
+	    .data(tooltips, function(d) { return d.id; });
 
     tooltipText.enter().append('text')
 	.attr('class', 'd3-tooltip-text')

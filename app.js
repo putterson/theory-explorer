@@ -41,24 +41,23 @@ let App = React.createClass({
 	return <div> 
 	    <div> 
 	    {"Tuning is " + this.state.tuning.name}
-        </div>
+            </div>
 	    <div> 
 	    <select value={this.state.tuning.name}
-	onChange={({target: {value}}) => {
-	    this.setTuning(Board.getTuning(value));
-        }}
-	    >
+	            onChange={({target: {value}}) => {
+			this.setTuning(Board.getTuning(value));
+		    }}>
 	    {
 		Board.getTunings().map(function(tuning) {
 		    return <option key={tuning.name}
 		    value={tuning.name}>{tuning.name}</option>;
 		})
 	    }
-	</select>
+	    </select>
 	    </div>
 	    <Fretboard
-        appState={this.state}
-        setAppState={this.setAppState} />
+                appState={this.state}
+                setAppState={this.setAppState} />
 	    </div>;
     }
 });

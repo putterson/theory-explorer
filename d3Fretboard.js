@@ -16,6 +16,9 @@ fretboard.create = function(el, props, state) {
 	.attr('class', 'd3-strings');
 
     svg.append('g')
+	.attr('class', 'd3-string-notes');
+
+    svg.append('g')
 	.attr('class', 'd3-frets');
 
     svg.append('g')
@@ -76,6 +79,7 @@ fretboard.update = function(el, state, dispatcher) {
     var svg = d3.select(el).selectAll('.d3-fretboard');
     var dimentions = this.getDimentions(el,state);
     this._drawStrings(el, dimentions, state.strings);
+    this._drawStringNotes(el, dimentions, state.strings);
     this._drawFrets(el, dimentions, state.frets);
     this._drawFretNumbers(el, dimentions, state.frets);
 };
@@ -127,6 +131,42 @@ fretboard._drawStrings = function(el, dim, strings) {
 
     //remove any extra strings
     string.exit()
+	.remove();
+};
+
+fretboard._drawStringNotes = function(el, dim, strings) {
+    var g = d3.select(el).selectAll('.d3-string-notes');
+
+    var nstrings = strings.length;
+    
+    var note = g.selectAll('text')
+	    .data(strings, function(s) {return s.note+'-'+s.octave;});
+
+    note
+	.transition()
+	.duration(ANIMATION_DURATION)
+	.attr('x', function(d,i) {return alignx(dim.lpad / 3);})
+	.attr('y', function(d,i) {return aligny(i*(dim.bheight/(nstrings - 1)) + dim.tpad);})
+    	.attr("fill", "#000000")
+	.attr("font-family", "Monospace")
+	.attr("font-size", 10)
+	.attr("text-anchor", "middle")
+	.attr("alignment-baseline", "middle")
+	.text( function(d,i) { return d.note+d.octave; });
+
+    note.enter().append('text')
+	.transition()
+	.duration(ANIMATION_DURATION)
+	.attr('x', function(d,i) {return alignx(dim.lpad / 3);})
+	.attr('y', function(d,i) {return aligny(i*(dim.bheight/(nstrings - 1)) + dim.tpad);})
+    	.attr("fill", "#000000")
+	.attr("font-family", "Monospace")
+	.attr("font-size", 10)
+	.attr("text-anchor", "middle")
+    	.attr("alignment-baseline", "middle")
+	.text( function(d,i) { return d.note+d.octave; });
+
+    note.exit()
 	.remove();
 };
 

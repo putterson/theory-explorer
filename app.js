@@ -8,11 +8,13 @@ import Board from "./Board"
 
 let App = React.createClass({
     getInitialState() {
-	var default_tuning = Board.getDefaultTuning()
+	var default_tuning = Board.getDefaultTuning();
 	return {
+	    viewhints: { fret_start: 5,
+			 fret_end: 22 },
 	    tuning: default_tuning,
 	    strings: Board.getStrings(default_tuning),
-	    frets: Board.getFrets(24)
+	    frets: Board.getFrets(0,24)
 	};
     },
 
@@ -39,24 +41,23 @@ let App = React.createClass({
 	return <div> 
 	    <div> 
 	    {"Tuning is " + this.state.tuning.name}
-        </div>
+            </div>
 	    <div> 
 	    <select value={this.state.tuning.name}
-	onChange={({target: {value}}) => {
-	    this.setTuning(Board.getTuning(value));
-        }}
-	    >
+	            onChange={({target: {value}}) => {
+			this.setTuning(Board.getTuning(value));
+		    }}>
 	    {
 		Board.getTunings().map(function(tuning) {
 		    return <option key={tuning.name}
 		    value={tuning.name}>{tuning.name}</option>;
 		})
 	    }
-	</select>
+	    </select>
 	    </div>
 	    <Fretboard
-        appState={this.state}
-        setAppState={this.setAppState} />
+                appState={this.state}
+                setAppState={this.setAppState} />
 	    </div>;
     }
 });

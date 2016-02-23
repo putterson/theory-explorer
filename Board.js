@@ -1,3 +1,4 @@
+
 var tunings = [
     { name: "Standard",
       strings: [{ note: "E",
@@ -52,9 +53,9 @@ var tunings = [
 ];
 
 export default {
-    getFrets(n) {
+    getFrets(s,e) {
 	var frets = [];
-	for(var i = 0; i <= n; i++){
+	for(var i = s; i <= e; i++){
 	    frets.push({n: i});
 	}
 	return frets;

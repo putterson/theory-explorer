@@ -3,6 +3,8 @@ var d3 = require('d3');
 
 var fretboard = {};
 
+var ANIMATION_DURATION = 500;
+
 
 fretboard.create = function(el, props, state) {
     var svg = d3.select(el).append('svg')
@@ -104,6 +106,8 @@ fretboard._drawStrings = function(el, dim, strings) {
     
     //update existing strings
     string
+    	.transition()
+	.duration(ANIMATION_DURATION)
 	.attr('x1', alignx(dim.lpad))
 	.attr('y1', function(d,i) {return aligny(i*(dim.bheight/(nstrings - 1)) + dim.tpad);})
 	.attr('x2', function(d,i) {return alignx(dim.lpad + dim.bwidth);})
@@ -112,6 +116,8 @@ fretboard._drawStrings = function(el, dim, strings) {
 
     //add any new strings
     string.enter().append('line')
+       	.transition()
+	.duration(ANIMATION_DURATION)
 	.attr('class', 'd3-string')
 	.attr('x1', alignx(dim.lpad))
 	.attr('y1', function(d,i) {return aligny(i*(dim.bheight/(nstrings - 1)) + dim.tpad);})
@@ -120,7 +126,8 @@ fretboard._drawStrings = function(el, dim, strings) {
     	.attr('style', stringStyle);
 
     //remove any extra strings
-    string.exit().remove();
+    string.exit()
+	.remove();
 };
 
 
@@ -147,6 +154,8 @@ fretboard._drawFrets = function(el, dim, frets) {
 
     //Update existing frets
     fret
+    	.transition()
+	.duration(ANIMATION_DURATION)
 	.attr("x1", dim.getFretPosition())
     	.attr("y1", aligny(dim.tpad))
 	.attr("x2", dim.getFretPosition())
@@ -155,13 +164,18 @@ fretboard._drawFrets = function(el, dim, frets) {
 
     //Add any new frets
     fret.enter().append('line')
+       	.transition()
+	.duration(ANIMATION_DURATION)
 	.attr("x1", dim.getFretPosition())
     	.attr("y1", aligny(dim.tpad))
 	.attr("x2", dim.getFretPosition())
 	.attr("y2", aligny(dim.tpad+dim.bheight))
     	.attr('style', fretStyle);
 
-    fret.exit().remove();
+    fret.exit()
+       	.transition()
+	.duration(ANIMATION_DURATION)
+	.remove();
 };
 
 fretboard._drawFretNumbers = function(el, dim, frets) {
@@ -188,6 +202,8 @@ fretboard._drawFretNumbers = function(el, dim, frets) {
     };
 
     num
+	.transition()
+	.duration(ANIMATION_DURATION)
 	.attr("fill", "#000000")
 	.attr("font-family", "Monospace")
 	.attr("font-size", 10)
@@ -197,6 +213,8 @@ fretboard._drawFretNumbers = function(el, dim, frets) {
 	.text(function(d,i) {return d.n;});
 
     num.enter().append('text')
+       	.transition()
+	.duration(ANIMATION_DURATION)
     	.attr("fill", "#000000")
 	.attr("font-family", "Monospace")
 	.attr("font-size", 10)

@@ -55,7 +55,7 @@ fretboard.getDimentions = function(el, state) {
 	return function(d,i){
 	    var start_position = calcFretPosition(viewhints.fret_start);
 	    var end_position = calcFretPosition(viewhints.fret_end);
-	    return (calcFretPosition(i) - start_position) / (end_position - start_position) * bwidth + lpad;
+	    return (calcFretPosition(d.n) - start_position) / (end_position - start_position) * bwidth + lpad;
 	};
     };
     

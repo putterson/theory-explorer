@@ -135,7 +135,7 @@ fretboard._drawFrets = function(el, dim, frets) {
     
     var fretStyle = function(d, i) {
 	var width;
-	if(i === 0){
+	if(d.n === 0){
 	    width = "6px";
 	}else {
 	    width = "2px";

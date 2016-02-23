@@ -95,7 +95,7 @@ fretboard._drawStrings = function(el, dim, strings) {
     var nstrings = strings.length;
 
     var string = g.selectAll('line')
-	.data(strings);//, function(s) {return s.note+'-'+s.octave+'-'+width;});
+	    .data(strings, function(s) {return s.note+'-'+s.octave;});
 
     var stringStyle = function(d,i) { 
 	var dashed = "";

@@ -43,13 +43,13 @@ var tunings = [
 		  octave: 2 }]},
     { name: "Standard Bass",
       strings: [{ note: "G",
-		  octave: 3 },
-		{ note: "D",
-		  octave: 3 },
-		{ note: "A",
 		  octave: 2 },
+		{ note: "D",
+		  octave: 2 },
+		{ note: "A",
+		  octave: 1 },
 		{ note: "E",
-		  octave: 2 }]}
+		  octave: 1 }]}
 ];
 
 export default {

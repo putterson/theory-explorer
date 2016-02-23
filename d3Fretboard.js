@@ -172,8 +172,6 @@ fretboard._drawStringNotes = function(el, dim, strings) {
 	.text( function(d,i) { return d.note+d.octave; });
 
     note.exit()
-    	.transition()
-	.duration(ANIMATION_DURATION)
 	.remove();
 };
 

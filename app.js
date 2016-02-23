@@ -14,7 +14,7 @@ let App = React.createClass({
 			 fret_end: 22 },
 	    tuning: default_tuning,
 	    strings: Board.getStrings(default_tuning),
-	    frets: Board.getFrets(5,22)
+	    frets: Board.getFrets(0,24)
 	};
     },
 

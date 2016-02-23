@@ -61,6 +61,26 @@ export default {
 	return frets;
     },
 
+    getFretMarkers(s,e) {
+	var markers = [];
+	for(var i = s; i <= e; i++){
+	    if(i > 1 && i % 2 == 1 && (i+1) % 12 != 0 && (i-1) % 12 != 0){
+		markers.push({n: i - 0.5,
+			      f: i,
+			      y: 0.5});
+	    }else if(i > 1 && i % 12 == 0) {
+		markers.push({n: i - 0.5,
+			      f: i,
+			      y: (1/3)});
+		markers.push({n: i - 0.5,
+			      f: i,
+			      y: (2/3)});
+		
+	    }
+	}
+	return markers;
+    },
+
     getDefaultTuning() {
 	return this.getTuning("Standard");
     },

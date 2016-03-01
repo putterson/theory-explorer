@@ -23,8 +23,9 @@
 	"watchify": "^3.7.0"
     },
     "scripts": {
-	"start": "watchify -t [ babelify --presets [ es2015 react ] ] app.js -o bundle.js --debug -d -v",
-	"build": "browserify -t [ babelify --presets [ es2015 react ] ] -g uglifyify app.js -o bundle.js --debug",
+	"start": "watchify -t [ babelify --presets [ es2015 react ] ] js/app.js -o js/bundle.js --debug -d -v",
+	"build": "browserify -t [ babelify --presets [ es2015 react ] ] js/app.js -o js/bundle.js --debug",
+	"release": "browserify -t [ babelify --presets [ es2015 react ] ] -g uglifyify js/app.js -o js/bundle.js",
 	"electron": "electron main.js"
     }
 }

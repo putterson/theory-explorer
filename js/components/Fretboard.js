@@ -2,7 +2,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var _ = require('lodash');
 
-var d3Fretboard = require('./d3Fretboard');
+var d3Fretboard = require('../d3/d3Fretboard');
 
 var Fretboard = React.createClass({
     getDefaultProps: function() {

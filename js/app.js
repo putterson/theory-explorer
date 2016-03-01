@@ -3,8 +3,8 @@ var ReactDOM = require("react-dom");
 
 var _ = require("lodash");
 
-var Fretboard = require("./Fretboard");
-import Board from "./Board"
+var Fretboard = require("./components/Fretboard");
+import Board from "./stores/Board";
 
 let App = React.createClass({
     getInitialState() {

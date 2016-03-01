@@ -24,7 +24,8 @@
     },
     "scripts": {
 	"start": "watchify -t [ babelify --presets [ es2015 react ] ] app.js -o bundle.js --debug -d -v",
-	"build": "browserify -t [ babelify --presets [ es2015 react ] ] -g uglifyify app.js -o bundle.js --debug"
+	"build": "browserify -t [ babelify --presets [ es2015 react ] ] -g uglifyify app.js -o bundle.js --debug",
+	"electron": "electron main.js"
     }
 }
 	

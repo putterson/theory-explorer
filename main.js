@@ -3,7 +3,7 @@ var app = require("app"),
 
 app.on("window-all-closed", function() {
   // if (process.platform != "darwin") {
-    app.quit();
+  app.quit();
   // }
 })
 
@@ -33,7 +33,7 @@ app.on("ready", function() {
   mainWindow.loadURL(homepageUrl);
 
   // open Chromium DevTools
-   mainWindow.openDevTools();
+  mainWindow.openDevTools();
   mainWindow.on("closed", function() {
     mainWindow = null;
   });

@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 import { setTuning } from '../actions'
 
-import Tuning from '../components/Tuning'
-import TuningSelector from '../components/TuningSelector'
+import Tuning_ from '../components/Tuning'
+import TuningSelector_ from '../components/TuningSelector'
 
 const mapStateToProps = (state) => {
   return {
@@ -20,9 +20,12 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 
-const TuningContainer = connect(
+export const TuningSelector = connect(
   mapStateToProps,
   mapDispatchToProps
-)(TuningSelector)
+)(TuningSelector_)
 
-export default TuningContainer
+export const Tuning = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Tuning_)

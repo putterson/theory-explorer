@@ -1,79 +1,51 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var _ = require('lodash');
+import React, { PropTypes } from 'react'
+import ReactDOM from 'react-dom'
+import { connect } from 'react-redux'
+import _ from 'lodash'
+import d3Fretboard from '../d3/d3Fretboard'
 
-var d3Fretboard = require('../d3/d3Fretboard');
+var fretboard = React.createClass({
+  componentDidMount: function() {
+    var el = ReactDOM.findDOMNode(this)
+    var dispatcher = d3Fretboard.create(el, this.props)
+    window.addEventListener('resize', this.handleResize)
+    this.dispatcher = dispatcher
+  },
 
-var Fretboard = React.createClass({
-    getDefaultProps: function() {
-	return {
-	    width: '100%',
-	    height: '200px'
-	};
-    },
+  handleResize(){
+    var el = ReactDOM.findDOMNode(this)
+    d3Fretboard.update(el, this.props, this.dispatcher)
+  },
 
-    dispatcher: null,
+  componentDidUpdate: function(prevProps, prevState) {
+    var el = ReactDOM.findDOMNode(this)
+    d3Fretboard.update(el, this.props, this.dispatcher)
+    
+  },
 
-    componentDidMount: function() {
-	var el = ReactDOM.findDOMNode(this);
-	var dispatcher = d3Fretboard.create(el, {
-	    width: this.props.width,
-	    height: this.props.height
-	}, this.getFretboardState());
-	this.dispatcher = dispatcher;
-    },
+  getFretboardState: function() {
+    var appState = this.props.appState
+    return _.assign({}, appState)
+  },
 
-    componentDidUpdate: function(prevProps, prevState) {
-	var el = ReactDOM.findDOMNode(this);
-	d3Fretboard.update(el, this.getFretboardState(), this.dispatcher);
-	
-    },
+  render: function() {
+    return (
+	<div className='Fretboard'></div>
+    )
+  }  
+})
 
-    getFretboardState: function() {
-	var appState = this.props.appState;
+const mapStateToProps = (state) => {
+  return state
+}
 
-	var tooltips = [];
-	if (appState.showingAllTooltips) {
-	    tooltips = appState.data;
-	}
-	else if (appState.tooltip) {
-	    tooltips = [appState.tooltip];
-	}
+const mapDispatchToProps = (dispatch) => {
+  return {}
+}
 
-	return _.assign({}, appState, {tooltips: tooltips});
-    },
+const Fretboard = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(fretboard)
 
-    render: function() {
-	return (
-		<div className='Fretboard'></div>
-	);
-    },
-
-    handleResize: function() {
-    },
-
-    showTooltip: function(d) {
-	if (this.props.appState.showingAllTooltips) {
-	    return;
-	}
-
-	this.props.setAppState({
-	    tooltip: d,
-	    // Disable animation
-	    prevDomain: null
-	});
-    },
-
-    hideTooltip: function() {
-	if (this.props.appState.showingAllTooltips) {
-	    return;
-	}
-	
-	this.props.setAppState({
-	    tooltip: null,
-	    prevDomain: null
-	});
-    }
-});
-
-module.exports = Fretboard;
+export default Fretboard

@@ -5,7 +5,7 @@ app.on("window-all-closed", function() {
   // if (process.platform != "darwin") {
   app.quit();
   // }
-})
+});
 
 //Watch dir for changes and reload on changes
 require('electron-reload')(__dirname+"/js/bundle.js");
@@ -22,11 +22,11 @@ app.on("ready", function() {
     center: true,
     resizable: true,
     frame: true,
-    transparent: false,
+    transparent: false
   });
 
   // hide default menubar
-  mainWindow.setMenu(null);
+  // mainWindow.setMenu(null);
 
   // load homepage
   var homepageUrl = "file://" + __dirname + "/index.html";

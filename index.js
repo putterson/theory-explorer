@@ -5,7 +5,7 @@ import { createStore } from 'redux'
 import App from './js/components/App'
 import explorerApp from './js/reducers'
 
-let store = createStore(explorerApp, explorerApp, window.devToolsExtension ? window.devToolsExtension() : undefined)
+let store = createStore(explorerApp, undefined, window.devToolsExtension ? window.devToolsExtension() : undefined)
 
 render(
   <Provider store={store}>

@@ -1,14 +1,14 @@
-var app = require("app"),
+var app = require("electron").app,
     BrowserWindow = require("browser-window");
 
 app.on("window-all-closed", function() {
   // if (process.platform != "darwin") {
-    app.quit();
+  app.quit();
   // }
-})
+});
 
 //Watch dir for changes and reload on changes
-require('electron-reload')(__dirname+"/bundle.js");
+require('electron-reload')(__dirname+"/js/bundle.js");
 
 // hold a global reference of the window object,
 // otherwise the window will be closed when this object is GCed
@@ -22,18 +22,18 @@ app.on("ready", function() {
     center: true,
     resizable: true,
     frame: true,
-    transparent: false,
+    transparent: false
   });
 
   // hide default menubar
-  mainWindow.setMenu(null);
+  // mainWindow.setMenu(null);
 
   // load homepage
   var homepageUrl = "file://" + __dirname + "/index.html";
   mainWindow.loadURL(homepageUrl);
 
   // open Chromium DevTools
-   mainWindow.openDevTools();
+  mainWindow.openDevTools();
   mainWindow.on("closed", function() {
     mainWindow = null;
   });

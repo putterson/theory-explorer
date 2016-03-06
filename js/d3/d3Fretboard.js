@@ -6,11 +6,11 @@ var fretboard = {};
 var ANIMATION_DURATION = 500;
 
 
-fretboard.create = function(el, props, state) {
+fretboard.create = function(el, props) {
     var svg = d3.select(el).append('svg')
 	    .attr('class', 'd3-fretboard')
-	    .attr('width', props.width)
-	    .attr('height', props.height);
+	    .attr('width', props.viewhints.width)
+	    .attr('height', props.viewhints.height);
 
 
     svg.append('g')
@@ -30,7 +30,7 @@ fretboard.create = function(el, props, state) {
 
     
     var dispatcher = new EventEmitter();
-    this.update(el, state, dispatcher);
+    this.update(el, props, dispatcher);
 
     return dispatcher;
 };
@@ -172,8 +172,6 @@ fretboard._drawStringNotes = function(el, dim, strings) {
 	.text( function(d,i) { return d.note+d.octave; });
 
     note.exit()
-    	.transition()
-	.duration(ANIMATION_DURATION)
 	.remove();
 };
 

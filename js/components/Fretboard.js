@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import d3Fretboard from '../d3/d3Fretboard'
+import visibleFretboardSelector from '../selectors/fretboardSelectors'
 
 var fretboard = React.createClass({
   componentDidMount: function() {
@@ -35,16 +36,12 @@ var fretboard = React.createClass({
   }  
 })
 
-const mapStateToProps = (state) => {
-  return state
-}
-
 const mapDispatchToProps = (dispatch) => {
   return {}
 }
 
 const Fretboard = connect(
-  mapStateToProps,
+  visibleFretboardSelector,
   mapDispatchToProps
 )(fretboard)
 

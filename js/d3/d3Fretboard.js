@@ -30,6 +30,9 @@ fretboard.create = function(el, props) {
 
   svg.append('g')
     .attr('class', 'd3-note-markers');
+
+  svg.append('g')
+    .attr('class', 'd3-note-marker-text');
   
   var dispatcher = new EventEmitter();
   this.update(el, props, dispatcher);
@@ -105,6 +108,7 @@ fretboard.update = function(el, state, dispatcher) {
   this._drawStrings(el, dimentions, state.strings);
   this._drawStringNotes(el, dimentions, state.strings);
   this._drawStringNoteMarkers(el, dimentions, state.notemarkers, state.strings);
+  this._drawStringNoteMarkerText(el, dimentions, state.notemarkers, state.strings);
 };
 
 
@@ -199,7 +203,7 @@ fretboard._drawStringNoteMarkers = function(el, dim, markers, strings) {
   var nstrings = strings.length;
   
   var marker = g.selectAll('circle')
-	.data(markers, function(m,i) {return m+i});
+	.data(markers, function(m,i) {return m.string+i});
 
   marker
     .transition()
@@ -221,6 +225,40 @@ fretboard._drawStringNoteMarkers = function(el, dim, markers, strings) {
   marker.exit()
     .remove();
 };
+
+fretboard._drawStringNoteMarkerText = function(el,dim,markers,strings) {
+  var g = d3.select(el).selectAll('.d3-note-marker-text');
+
+  var nstrings = strings.length;
+  
+  var note = g.selectAll('text')
+	.data(markers, function(m,i) {return m.string+i});
+
+  note
+    .transition()
+    .duration(ANIMATION_DURATION)
+    .attr('x', dim.getNoteMarkerPosition())
+    .attr('y', function(d,i) {return aligny(strings.indexOf(d.string)*(dim.bheight/(nstrings - 1)) + dim.tpad);})
+    .attr("font-family", "Monospace")
+    .attr("font-size", 12)
+    .attr("text-anchor", "middle")
+    .attr("alignment-baseline", "middle")
+    .text( function(d,i) { return d.note });
+
+  note.enter().append('text')
+    .transition()
+    .duration(ANIMATION_DURATION)
+    .attr('x', dim.getNoteMarkerPosition())
+    .attr('y',  function(d,i) {return aligny(strings.indexOf(d.string)*(dim.bheight/(nstrings - 1)) + dim.tpad);})
+    .attr("font-family", "Monospace")
+    .attr("font-size", 12)
+    .attr("text-anchor", "middle")
+    .attr("alignment-baseline", "middle")
+    .text( function(d,i) { return d.note });
+
+  note.exit()
+    .remove();
+}
 
 
 fretboard._drawFrets = function(el, dim, frets) {    

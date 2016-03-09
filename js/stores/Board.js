@@ -53,8 +53,8 @@ var tunings = [
 ];
 
 var tones = {
-  "Sharps" : ["A","A♯","B","C","C♯","D","D♯","E","F","F♯","G","G♯"],
-  "Flats"  : ["A","B♭","B","C","D♭","D","E♭","E","F","G♭","G","A♭"]
+  sharps : ["A","A♯","B","C","C♯","D","D♯","E","F","F♯","G","G♯"],
+  flats  : ["A","B♭","B","C","D♭","D","E♭","E","F","G♭","G","A♭"]
 };
 
 //holds semitonal degrees used for each scale starting from the root
@@ -95,12 +95,14 @@ export default {
 
   getNoteMarkers(string, s, e) {
     var markers = []
+    var key = "C"
     for(var i = s; i <= e; i++){
       markers.push({fret: i,
 		    //TODO: make this string id
-		    string: string})
+		    string: string,
+		    note: tones.sharps[(tones.sharps.indexOf(string.note) + i) % tones.sharps.length]})
     }
-    return markers
+    return markers.filter((m) => scales.Major.includes((tones.sharps.indexOf(m.note) + 12  - tones.sharps.indexOf(key)) % 12 ) ).filter((m) => m.fret >= 8 && m.fret <= 12)
   },
 
   getDefaultTuning() {

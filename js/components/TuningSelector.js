@@ -1,12 +1,13 @@
 import React, { PropTypes } from 'react'
 
-const TuningSelector = ({ onTuningSelect, tunings, tuning }) => (
+const TuningSelector = ({ onTuningSelect, tunings, currentTuning }) => (
   <select
-     value={tuning}
+     value={currentTuning.name}
      onChange={({target: {value}}) => {
-       return onTuningSelect(value);
+       onTuningSelect(value);
       }
-    }>
+    }
+    >
     {tunings.map(function(tuning) {
       return <option key={tuning.name}
 		       value={tuning.name}>

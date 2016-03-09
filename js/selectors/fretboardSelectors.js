@@ -1,6 +1,10 @@
 import { createSelector, createStructuredSelector } from 'reselect'
 import Board from '../stores/Board'
 
+Array.prototype.flatMap = function(lambda) { 
+    return Array.prototype.concat.apply([], this.map(lambda)); 
+};
+
 const viewhintSelector = state => state.viewhints
 const tuningSelector = state => state.tuning
 
@@ -25,9 +29,22 @@ const visibleStringSelector = createSelector(
   }
 )
 
+const visibleNoteMarkerSelector = createSelector(
+  tuningSelector,
+  viewhintSelector,
+  (tuning, viewhints) => {
+    var getNoteMarkersInRange = (string) => {
+      return Board.getNoteMarkers(string, viewhints.fret_start, viewhints.fret_end)
+    }
+    
+    return tuning.strings.flatMap(getNoteMarkersInRange)
+  }
+)
+
 const visibleFretboardSelector = createStructuredSelector({
   frets: visibleFretSelector,
   fretmarkers: visibleFretMarkerSelector,
+  notemarkers: visibleNoteMarkerSelector,
   strings: visibleStringSelector,
   viewhints: viewhintSelector
 })

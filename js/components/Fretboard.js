@@ -24,11 +24,6 @@ var fretboard = React.createClass({
     
   },
 
-  getFretboardState: function() {
-    var appState = this.props.appState
-    return _.assign({}, appState)
-  },
-
   render: function() {
     return (
 	<div className='Fretboard'></div>

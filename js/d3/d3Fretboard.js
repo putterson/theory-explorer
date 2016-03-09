@@ -28,6 +28,8 @@ fretboard.create = function(el, props) {
   svg.append('g')
     .attr('class', 'd3-string-notes');
 
+  svg.append('g')
+    .attr('class', 'd3-note-markers');
   
   var dispatcher = new EventEmitter();
   this.update(el, props, dispatcher);
@@ -38,7 +40,8 @@ fretboard.create = function(el, props) {
 fretboard.getDimentions = function(el, state) {
   var width = el.offsetWidth;
   var height = el.offsetHeight;
-  var lpad = 25;
+
+  var lpad = 35;
   var rpad = 25;
   var tpad = height* .20;
   var bpad = height* .10;
@@ -46,25 +49,38 @@ fretboard.getDimentions = function(el, state) {
   var bwidth = width  - lpad - rpad;
   var bheight = height - tpad - bpad;
 
-  var getFretPosition = function(){
-    function calcFretPosition(i) {
-      //https://en.wikipedia.org/wiki/Scale_length_(string_instruments)
-      //12throot(2) / (12throot(2) - 1)
-      var twroottwo = 1.059463094;
-      var divisor = 17.817154;
-      
-      var stringwidth = bwidth;
-      var pos = 1/(Math.pow(twroottwo, i) * stringwidth);
-      return pos;	
-    }
+  var notemarkerRadius = bheight * 0.07
 
+  function calcFretPosition(i) {
+    //https://en.wikipedia.org/wiki/Scale_length_(string_instruments)
+    //12throot(2) / (12throot(2) - 1)
+    var twroottwo = 1.059463094;
+    var divisor = 17.817154;
     
+    var stringwidth = bwidth;
+    var pos = 1/(Math.pow(twroottwo, i) * stringwidth);
+    return pos;	
+  }
+  
+  var getFretPosition = function(){
     return function(d,i){
       var start_position = calcFretPosition(viewhints.fret_start);
       var end_position = calcFretPosition(viewhints.fret_end);
       return (calcFretPosition(d.n) - start_position) / (end_position - start_position) * bwidth + lpad;
     };
   };
+
+  var getNoteMarkerPosition = () => {
+    return (d,i) => {
+      var start_position = calcFretPosition(viewhints.fret_start);
+      var end_position = calcFretPosition(viewhints.fret_end);
+      if(d.fret === 0){
+	return (calcFretPosition(d.fret) - start_position) / (end_position - start_position) * bwidth + lpad;
+      } else {
+	return (calcFretPosition(d.fret) - start_position) / (end_position - start_position) * bwidth + lpad - (notemarkerRadius * 1.5);
+      }
+    }
+  }
   
   return {
     lpad: lpad,
@@ -73,8 +89,10 @@ fretboard.getDimentions = function(el, state) {
     bpad: bpad,
     bwidth: bwidth,
     bheight: bheight,
+    notemarkerRadius: notemarkerRadius,
     viewhints: viewhints,
-    getFretPosition: getFretPosition
+    getFretPosition: getFretPosition,
+    getNoteMarkerPosition: getNoteMarkerPosition
   };
 };
 
@@ -86,8 +104,7 @@ fretboard.update = function(el, state, dispatcher) {
   this._drawFretMarkers(el, dimentions, state.fretmarkers);
   this._drawStrings(el, dimentions, state.strings);
   this._drawStringNotes(el, dimentions, state.strings);
-  this._drawStringNoteMarkers(el, dimentions, state.strings);
-
+  this._drawStringNoteMarkers(el, dimentions, state.notemarkers, state.strings);
 };
 
 
@@ -176,8 +193,33 @@ fretboard._drawStringNotes = function(el, dim, strings) {
     .remove();
 };
 
-fretboard._drawStringNoteMarkers = function(el, dim, strings) {
+fretboard._drawStringNoteMarkers = function(el, dim, markers, strings) {
+  var g = d3.select(el).selectAll('.d3-note-markers');
 
+  var nstrings = strings.length;
+  
+  var marker = g.selectAll('circle')
+	.data(markers, function(m,i) {return m+i});
+
+  marker
+    .transition()
+    .duration(ANIMATION_DURATION)
+    .attr('cx', dim.getNoteMarkerPosition())
+    .attr('cy', function(d,i) {return aligny(strings.indexOf(d.string)*(dim.bheight/(nstrings - 1)) + dim.tpad);})
+    .attr('r', dim.notemarkerRadius)
+
+  marker.enter().append('circle')
+    .transition()
+    .duration(ANIMATION_DURATION)
+    .attr('cx', dim.getNoteMarkerPosition())
+    .attr('cy', function(d,i) {return aligny(strings.indexOf(d.string)*(dim.bheight/(nstrings - 1)) + dim.tpad);})
+    .attr('r', dim.notemarkerRadius)
+    .attr("fill", "#FFAADD")
+    .attr('fill-opacity', 0.8)
+    .attr('stroke', '#000000');
+
+  marker.exit()
+    .remove();
 };
 
 
@@ -242,7 +284,7 @@ fretboard._drawFretNumbers = function(el, dim, frets) {
     .attr("font-size", 10)
     .attr("text-anchor", "middle")
     .attr("x", dim.getFretPosition())
-    .attr("y", dim.tpad - 10)
+    .attr("y", dim.tpad - 15)
     .text(function(d,i) {return d.n;});
 
   num.enter().append('text')
@@ -253,7 +295,7 @@ fretboard._drawFretNumbers = function(el, dim, frets) {
     .attr("font-size", 10)
     .attr("text-anchor", "middle")
     .attr("x", dim.getFretPosition())
-    .attr("y", dim.tpad - 10)
+    .attr("y", dim.tpad - 15)
     .text(function(d,i) {return d.n;});
 
 

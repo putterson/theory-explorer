@@ -6,8 +6,6 @@ import Fretboard from '../components/Fretboard'
 import { TuningSelector } from '../containers/TuningContainer'
 import Board from '../stores/Board'
 
-import _ from 'lodash'
-
 const App = () => (
     <div>
     Tuning is <TuningSelector/>

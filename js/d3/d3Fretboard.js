@@ -203,7 +203,7 @@ fretboard._drawStringNoteMarkers = function(el, dim, markers, strings) {
   var nstrings = strings.length;
   
   var marker = g.selectAll('circle')
-	.data(markers, function(m,i) {return m.string+i});
+	.data(markers, function(m,i) {return m.string+m.note+i});
 
   marker
     .transition()
@@ -211,6 +211,10 @@ fretboard._drawStringNoteMarkers = function(el, dim, markers, strings) {
     .attr('cx', dim.getNoteMarkerPosition())
     .attr('cy', function(d,i) {return aligny(strings.indexOf(d.string)*(dim.bheight/(nstrings - 1)) + dim.tpad);})
     .attr('r', dim.notemarkerRadius)
+      .attr("fill", "#FFAADD")
+    .attr('fill-opacity', 0.8)
+    .attr('stroke', '#000000');
+ 
 
   marker.enter().append('circle')
     .transition()
@@ -232,7 +236,7 @@ fretboard._drawStringNoteMarkerText = function(el,dim,markers,strings) {
   var nstrings = strings.length;
   
   var note = g.selectAll('text')
-	.data(markers, function(m,i) {return m.string+i});
+	.data(markers, function(m,i) {return m.string+m.note+i});
 
   note
     .transition()

@@ -102,7 +102,7 @@ export default {
 		    string: string,
 		    note: tones.sharps[(tones.sharps.indexOf(string.note) + i) % tones.sharps.length]})
     }
-    return markers.filter((m) => scales.Major.includes((tones.sharps.indexOf(m.note) + 12  - tones.sharps.indexOf(key)) % 12 ) ).filter((m) => m.fret >= 8 && m.fret <= 12)
+    return markers
   },
 
   getDefaultTuning() {
@@ -119,5 +119,21 @@ export default {
 
   getTuning(tuningName) {
     return tunings.filter( (value) => value.name === tuningName )[0];
+  },
+
+  getKeys() {
+    return tones.sharps.map((pitchClass, i) => {return { name: pitchClass, id: i }})
+  },
+
+  getKey(id) {
+    return tones.sharps[id]
+  },
+
+  getModInterval(base_pitch, interval_pitch) {
+    return (tones.sharps.indexOf(interval_pitch) + 12 - tones.sharps.indexOf(base_pitch)) % 12
+  },
+
+  isIntervalInScale(interval, scale = scales.Major) {
+    return scale.includes(interval)
   }
 };

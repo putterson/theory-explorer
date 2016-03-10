@@ -7,6 +7,7 @@ Array.prototype.flatMap = function(lambda) {
 
 const viewhintSelector = state => state.viewhints
 const tuningSelector = state => state.tuning
+const keySelector = state => state.key
 
 const visibleFretSelector = createSelector(
   viewhintSelector,
@@ -31,10 +32,11 @@ const visibleStringSelector = createSelector(
 
 const visibleNoteMarkerSelector = createSelector(
   tuningSelector,
+  keySelector,
   viewhintSelector,
-  (tuning, viewhints) => {
+  (tuning, key, viewhints) => {
     var getNoteMarkersInRange = (string) => {
-      return Board.getNoteMarkers(string, viewhints.fret_start, viewhints.fret_end)
+      return Board.getNoteMarkers(string, viewhints.fret_start, viewhints.fret_end).filter((marker) => {return Board.isIntervalInScale(Board.getModInterval(key,marker.note))})
     }
     
     return tuning.strings.flatMap(getNoteMarkersInRange)

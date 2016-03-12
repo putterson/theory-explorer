@@ -1,16 +1,17 @@
 import React, { PropTypes } from 'react'
 
 const KeySelector = ({ onKeySelect, keys, currentKey }) => (
-    <div>
+    <div className="btn-group" role="group" data-toggle="buttons">
     {keys.map(function(key){
-      return <label key={key.id}>
-	<input
-      type="radio"
+      return <button
+      type="button"
+      className={"btn btn-default" + (key.name === currentKey ? 'active' : '')}
+      key={key.id}
       id={key.id}
-      name="options"
-      onChange={({target: {id}}) => {onKeySelect(id)}}/>
+      aria-pressed={key.name === currentKey}
+      onClick={({target: {id}}) => {onKeySelect(id)}}>
 	{key.name}
-      </label>
+	</button>
     })}
   </div>
 )

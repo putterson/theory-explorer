@@ -36,7 +36,7 @@ const visibleNoteMarkerSelector = createSelector(
   viewhintSelector,
   (tuning, key, viewhints) => {
     var getNoteMarkersInRange = (string) => {
-      return Board.getNoteMarkers(string, viewhints.fret_start, viewhints.fret_end).filter((marker) => {return Board.isIntervalInScale(Board.getModInterval(key,marker.note))})
+      return Board.getNoteMarkers(string, viewhints.fret_start, viewhints.fret_end).filter((marker) => {return Board.isIntervalInScale(Board.getModInterval(key,marker.note))}).map((marker) => {(marker['id'] = Board.getModInterval(key,marker.note) + Board.getDivInterval(key,marker.note) + string.note + string.octave); return marker})
     }
     
     return tuning.strings.flatMap(getNoteMarkersInRange)

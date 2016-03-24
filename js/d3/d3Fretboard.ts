@@ -1,7 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
 var d3 = require('d3');
 
-var fretboard = {};
+let fretboard : any = {};
 
 var ANIMATION_DURATION = 500;
 
@@ -417,80 +417,6 @@ fretboard._drawPoints = function(el, scales, data, prevScales, dispatcher) {
   }
 };
 
-fretboard._drawTooltips = function(el, scales, tooltips, prevScales) {
-  var g = d3.select(el).selectAll('.d3-tooltips');
-
-  var tooltipRect = g.selectAll('.d3-tooltip-rect')
-	.data(tooltips, function(d) { return d.id; });
-
-  tooltipRect.enter().append('rect')
-    .attr('class', 'd3-tooltip-rect')
-    .attr('width', TOOLTIP_WIDTH)
-    .attr('height', TOOLTIP_HEIGHT)
-    .attr('x', function(d) {
-      if (prevScales) {
-	return prevScales.x(d.x) - TOOLTIP_WIDTH/2;
-      }
-      return scales.x(d.x) - TOOLTIP_WIDTH/2;
-    })
-    .transition()
-    .duration(ANIMATION_DURATION)
-    .attr('x', function(d) { return scales.x(d.x) - TOOLTIP_WIDTH/2; });
-
-  tooltipRect.attr('y', function(d) { return scales.y(d.y) - scales.z(d.z)/2 - TOOLTIP_HEIGHT; })
-    .transition()
-    .duration(ANIMATION_DURATION)
-    .attr('x', function(d) { return scales.x(d.x) - TOOLTIP_WIDTH/2; });
-
-  if (prevScales) {
-    tooltipRect.exit()
-      .transition()
-      .duration(ANIMATION_DURATION)
-      .attr('x', function(d) { return scales.x(d.x) - TOOLTIP_WIDTH/2; })
-      .remove();
-  }
-  else {
-    tooltipRect.exit()
-      .remove();
-  }
-
-  var tooltipText = g.selectAll('.d3-tooltip-text')
-	.data(tooltips, function(d) { return d.id; });
-
-  tooltipText.enter().append('text')
-    .attr('class', 'd3-tooltip-text')
-    .attr('dy', '0.35em')
-    .attr('text-anchor', 'middle')
-    .text(function(d) { return d.z; })
-    .attr('x', function(d) {
-      if (prevScales) {
-	return prevScales.x(d.x);
-      }
-      return scales.x(d.x);
-    })
-    .transition()
-    .duration(ANIMATION_DURATION)
-    .attr('x', function(d) { return scales.x(d.x); });
-
-  tooltipText.attr('y', function(d) { return scales.y(d.y) - scales.z(d.z)/2 - TOOLTIP_HEIGHT/2; })
-    .transition()
-    .duration(ANIMATION_DURATION)
-    .attr('x', function(d) { return scales.x(d.x); });
-
-  if (prevScales) {
-    tooltipText.exit()
-      .transition()
-      .duration(ANIMATION_DURATION)
-      .attr('x', function(d) { return scales.x(d.x); })
-      .remove();
-  }
-  else {
-    tooltipText.exit()
-      .remove();
-  }
-};
-
-
 fretboard.destroy = function(el) {
 
 };
@@ -505,4 +431,4 @@ function aligny(x){
 }
 //this.alignin = aligny;
 
-module.exports = fretboard;
+export default fretboard;

@@ -1,11 +1,11 @@
-import React from 'react'
 import { render } from 'react-dom'
-import { Provider } from 'react-redux'
+const React = require('react')
+const { Provider } = require('react-redux')
 import { createStore } from 'redux'
 import App from './js/components/App'
 import explorerApp from './js/reducers'
 
-let store = createStore(explorerApp, undefined, window.devToolsExtension ? window.devToolsExtension() : undefined)
+let store = createStore(explorerApp, undefined, window.hasOwnProperty('devToolsExtension') ? window['devToolsExtension']() : undefined)
 
 render(
   <Provider store={store}>

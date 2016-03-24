@@ -96,6 +96,7 @@ export default {
   getNoteMarkers(string, s, e) {
     var markers = []
     for(var i = s; i <= e; i++){
+      console.log("Fret " + i)
       markers.push({fret: i,
 		    //TODO: make this string id
 		    string: string,
@@ -133,10 +134,10 @@ export default {
   },
 
   getDivInterval(base_pitch, interval_pitch) {
-    return (tones.sharps.indexOf(interval_pitch) + 12 - tones.sharps.indexOf(base_pitch)) / 12
+    return ((tones.sharps.indexOf(interval_pitch) + 12 - tones.sharps.indexOf(base_pitch)) / 12)
   },
 
   isIntervalInScale(interval, scale = scales.Major) {
-    return scale.includes(interval)
+    return scale.filter((n) => interval === n).length > 0
   }
 };

@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+const React = require('react')
 
 const KeySelector = ({ onKeySelect, keys, currentKey }) => (
     <div className="btn-group" role="group" data-toggle="buttons">
@@ -9,7 +9,7 @@ const KeySelector = ({ onKeySelect, keys, currentKey }) => (
       key={key.id}
       id={key.id}
       aria-pressed={key.name === currentKey}
-      onClick={({target: {id}}) => {onKeySelect(id)}}>
+      onClick={onKeySelect.bind(this, key.id)}>
 	{key.name}
 	</button>
     })}

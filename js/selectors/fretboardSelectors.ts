@@ -1,7 +1,7 @@
-import { createSelector, createStructuredSelector } from 'reselect'
-import Board from '../stores/Board'
+const { createSelector, createStructuredSelector } = require('reselect')
+import Board from '../stores/Board';
 
-Array.prototype.flatMap = function(lambda) { 
+(Array.prototype as any).flatMap = function(lambda) { 
     return Array.prototype.concat.apply([], this.map(lambda)); 
 };
 
@@ -36,7 +36,15 @@ const visibleNoteMarkerSelector = createSelector(
   viewhintSelector,
   (tuning, key, viewhints) => {
     var getNoteMarkersInRange = (string) => {
-      return Board.getNoteMarkers(string, viewhints.fret_start, viewhints.fret_end).filter((marker) => {return Board.isIntervalInScale(Board.getModInterval(key,marker.note))}).map((marker) => {(marker['id'] = Board.getModInterval(key,marker.note) + Board.getDivInterval(key,marker.note) + string.note + string.octave); return marker})
+      return Board.getNoteMarkers(string, viewhints.fret_start, viewhints.fret_end)
+	.filter((marker) => {return Board.isIntervalInScale(Board.getModInterval(key,marker.note))})
+	.map((marker) =>
+	     {(marker['id'] = Board.getModInterval(key,marker.note) + '-' +
+	       Board.getDivInterval(key,marker.note) + '-' +
+	       string.note + '-' +
+	       string.octave);
+	      console.log(marker['id']);
+	      return marker})
     }
     
     return tuning.strings.flatMap(getNoteMarkersInRange)

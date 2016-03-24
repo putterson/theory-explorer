@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "jsx": "react",
+    "sourceMap": true,
+    "noImplicitAny": false
+  },
+  "files": [
+    "./typings/main.d.ts",
+    "./index.tsx"
+  ],
+  "filesGlob": [
+    "./**/*.ts",
+    "!./**/*.d.ts",
+    "./typings/**/*.d.ts",
+    "!./repo/**/*.ts",
+    "!./node_modules/**/*",
+    "!./tmp/**/*.ts",
+    "./node_modules/typescript/lib/lib.es6.d.ts"
+  ]
+}

@@ -1,7 +1,7 @@
-import React, { PropTypes } from 'react'
-import ReactDOM from 'react-dom'
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
-import _ from 'lodash'
+
 import d3Fretboard from '../d3/d3Fretboard'
 import visibleFretboardSelector from '../selectors/fretboardSelectors'
 

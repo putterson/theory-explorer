@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import * as React from 'react'
 
 const Tuning = ({ currentTuning }) => (
   <p>{"Tuning is " + currentTuning.name }</p>

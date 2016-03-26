@@ -52,9 +52,22 @@ var tunings = [
 		octave: 1 }]}
 ];
 
+interface PitchClass {
+    name : string;
+    id : number;
+}
+
+interface Note {
+    class : PitchClass;
+    octave : number;
+}
+
 var tones = {
-  sharps : ["A","A♯","B","C","C♯","D","D♯","E","F","F♯","G","G♯"],
-  flats  : ["A","B♭","B","C","D♭","D","E♭","E","F","G♭","G","A♭"]
+  length : 12,
+  names : {
+    sharps : ["A","A♯","B","C","C♯","D","D♯","E","F","F♯","G","G♯"],
+    flats  : ["A","B♭","B","C","D♭","D","E♭","E","F","G♭","G","A♭"]
+  }
 };
 
 //holds semitonal degrees used for each scale starting from the root
@@ -62,6 +75,21 @@ var scales = {
   "Pentatonic"    : [0,2,4,7,9],
   "Major"         : [0,2,4,5,7,9,11],
   "Natural Minor" : [0,2,3,5,7,8,10]
+};
+
+  
+function getPitchClasses() : Array<PitchClass> {
+  return tones.names.sharps.map((name, i) => {return {name: name, id: i}})
+};
+
+function getPitchClassById(n : number) : PitchClass {
+    //Assume that ids are unique
+    return getPitchClasses().filter((pitch) => {return pitch.id === n}).pop()
+};
+
+function getPitchClassByName(n : string) : PitchClass {
+    //Assume that ids are unique
+    return getPitchClasses().filter((pitch) => {return pitch.name === n}).pop()
 };
 
 export default {
@@ -93,15 +121,18 @@ export default {
     return markers;
   },
 
+
   getNoteMarkers(string, s, e) {
+    let pitchClasses = getPitchClasses();
     var markers = []
     for(var i = s; i <= e; i++){
       console.log("Fret " + i)
       markers.push({fret: i,
 		    //TODO: make this string id
 		    string: string,
-		    note: tones.sharps[(tones.sharps.indexOf(string.note) + i) % tones.sharps.length]})
-    }
+            //Assumes that markers are one pitch class away from eachother
+		    note: getPitchClassById(getPitchClassByName(string.note).id + i % pitchClasses.length)
+    })}
     return markers
   },
 
@@ -122,19 +153,21 @@ export default {
   },
 
   getKeys() {
-    return tones.sharps.map((pitchClass, i) => {return { name: pitchClass, id: i }})
+    return getPitchClasses()
   },
 
   getKey(id) {
-    return tones.sharps[id]
+    return getPitchClassById(id)
   },
 
-  getModInterval(base_pitch, interval_pitch) {
-    return (tones.sharps.indexOf(interval_pitch) + 12 - tones.sharps.indexOf(base_pitch)) % 12
+  getModInterval(base_note : Note, interval_note : Note) {
+    let lengthPitchClasses = getPitchClasses.length
+    return (interval_note.class.id + lengthPitchClasses - base_note.class.id) % 12
   },
 
-  getDivInterval(base_pitch, interval_pitch) {
-    return ((tones.sharps.indexOf(interval_pitch) + 12 - tones.sharps.indexOf(base_pitch)) / 12)
+  getDivInterval(base_note : Note, interval_note : Note) {
+    let lengthPitchClasses = getPitchClasses.length
+    return interval_note.octave - base_note.octave
   },
 
   isIntervalInScale(interval, scale = scales.Major) {

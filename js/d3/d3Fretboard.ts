@@ -1,5 +1,8 @@
+import { Note, Tuning, PitchClass, NoteMarker } from '../stores/Board'
+import * as d3 from 'd3'
+
+
 var EventEmitter = require('events').EventEmitter;
-var d3 = require('d3');
 
 let fretboard : any = {};
 
@@ -114,7 +117,7 @@ fretboard.update = function(el, state, dispatcher) {
 
 
 //dim is dimentions
-fretboard._drawStrings = function(el, dim, strings) {
+fretboard._drawStrings = function(el, dim, strings : Array<Note>) {
   var g = d3.select(el).selectAll('.d3-strings');
   
 
@@ -126,7 +129,7 @@ fretboard._drawStrings = function(el, dim, strings) {
   var nstrings = strings.length;
 
   var string = g.selectAll('line')
-	.data(strings, function(s) {return s.note+'-'+s.octave;});
+	.data(strings, function(s: Note) {return s.pitch.id+'-'+s.octave;});
 
   var stringStyle = function(d,i) { 
     var dashed = "";
@@ -161,13 +164,13 @@ fretboard._drawStrings = function(el, dim, strings) {
     .remove();
 };
 
-fretboard._drawStringNotes = function(el, dim, strings) {
+fretboard._drawStringNotes = function(el, dim, strings: Array<Note>) {
   var g = d3.select(el).selectAll('.d3-string-notes');
 
   var nstrings = strings.length;
   
   var note = g.selectAll('text')
-	.data(strings, function(s) {return s.note+'-'+s.octave;});
+	.data(strings, function(s : Note) {return s.pitch.id+'-'+s.octave;});
 
   note
     .transition()
@@ -179,7 +182,7 @@ fretboard._drawStringNotes = function(el, dim, strings) {
     .attr("font-size", 10)
     .attr("text-anchor", "middle")
     .attr("alignment-baseline", "middle")
-    .text( function(d,i) { return d.note+d.octave; });
+    .text( function(d : Note,i) { return d.pitch.name+d.octave; });
 
   note.enter().append('text')
     .transition()
@@ -191,25 +194,25 @@ fretboard._drawStringNotes = function(el, dim, strings) {
     .attr("font-size", 10)
     .attr("text-anchor", "middle")
     .attr("alignment-baseline", "middle")
-    .text( function(d,i) { return d.note+d.octave; });
+    .text( function(d : Note,i) { return d.pitch.name+d.octave; });
 
   note.exit()
     .remove();
 };
 
-fretboard._drawStringNoteMarkers = function(el, dim, markers, strings) {
+fretboard._drawStringNoteMarkers = function(el, dim, markers : any, strings : Array<Note>) {
   var g = d3.select(el).selectAll('.d3-note-markers');
 
   var nstrings = strings.length;
   
   var marker = g.selectAll('circle')
-	.data(markers, function(m,i) {return m.id});
+	.data(markers, function(m : any,i) {return m.id});
 
   marker
     .transition()
     .duration(ANIMATION_DURATION)
     .attr('cx', dim.getNoteMarkerPosition())
-    .attr('cy', function(d,i) {return aligny(strings.indexOf(d.string)*(dim.bheight/(nstrings - 1)) + dim.tpad);})
+    .attr('cy', function(d ,i) {return aligny(strings.indexOf(d.string)*(dim.bheight/(nstrings - 1)) + dim.tpad);})
     .attr('r', dim.notemarkerRadius)
     .attr("fill", "#FFAADD")
     .attr('fill-opacity', 0.8)
@@ -232,13 +235,13 @@ fretboard._drawStringNoteMarkers = function(el, dim, markers, strings) {
     .remove();
 };
 
-fretboard._drawStringNoteMarkerText = function(el,dim,markers,strings) {
+fretboard._drawStringNoteMarkerText = function(el,dim,markers : Array<NoteMarker> ,strings : Array<Note>) {
   var g = d3.select(el).selectAll('.d3-note-marker-text');
 
   var nstrings = strings.length;
   
   var note = g.selectAll('text')
-	.data(markers, function(m,i) {return m.id});
+	.data(markers, function(m ,i) {return m.id});
 
   note
     .transition()
@@ -249,7 +252,7 @@ fretboard._drawStringNoteMarkerText = function(el,dim,markers,strings) {
     .attr("font-size", 12)
     .attr("text-anchor", "middle")
     .attr("alignment-baseline", "middle")
-    .text( function(d,i) { return d.note });
+    .text( function(d : NoteMarker ,i) { return d.note.pitch.name });
 
   note.enter().append('text')
     .transition()
@@ -260,7 +263,7 @@ fretboard._drawStringNoteMarkerText = function(el,dim,markers,strings) {
     .attr("font-size", 12)
     .attr("text-anchor", "middle")
     .attr("alignment-baseline", "middle")
-    .text( function(d,i) { return d.note });
+    .text( function(d : NoteMarker ,i) { return d.note.pitch.name });
 
   note.exit()
     .remove();
@@ -271,7 +274,7 @@ fretboard._drawFrets = function(el, dim, frets) {
   var g = d3.select(el).selectAll('.d3-frets');
 
   var fret = g.selectAll('line')
-	.data(frets,function(f){return f.n;});
+	.data(frets,function(f : any){return f.n;});
   
   var fretStyle = function(d, i) {
     var width;
@@ -315,7 +318,7 @@ fretboard._drawFretNumbers = function(el, dim, frets) {
 
   
   var num = g.selectAll('text')
-	.data(frets, function(f){return f.n;});
+	.data(frets, function(f : any){return f.n;});
 
   num.exit()
     .remove();
@@ -350,7 +353,7 @@ fretboard._drawFretMarkers = function(el, dim, markers) {
   var g = d3.select(el).selectAll('.d3-fret-markers');
   
   var marker = g.selectAll('circle')
-	.data(markers, function(f){return f.n+"-"+f.y;});
+	.data(markers, function(f : any){return f.n+"-"+f.y;});
 
   marker.exit()
     .remove();
@@ -378,7 +381,7 @@ fretboard._drawPoints = function(el, scales, data, prevScales, dispatcher) {
   var g = d3.select(el).selectAll('.d3-points');
 
   var point = g.selectAll('.d3-point')
-	.data(data, function(d) { return d.id; });
+	.data(data, function(d: any) { return d.id; });
 
   point.enter().append('circle')
     .attr('class', 'd3-point')

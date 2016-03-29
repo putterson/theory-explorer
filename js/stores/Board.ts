@@ -1,65 +1,23 @@
-
-var tunings = [
-  { name: "Standard",
-    strings: [{ note: "E",
-		octave: 4 },
-	      { note: "B",
-		octave: 3 },
-	      { note: "G",
-		octave: 3 },
-	      { note: "D",
-		octave: 3 },
-	      { note: "A",
-		octave: 2 },
-	      { note: "E",
-		octave: 2 }]},
-  { name: "Drop D",
-    strings: [{ note: "E",
-		octave: 4 },
-	      { note: "B",
-		octave: 3 },
-	      { note: "G",
-		octave: 3 },
-	      { note: "D",
-		octave: 3 },
-	      { note: "A",
-		octave: 2 },
-	      { note: "D",
-		octave: 2 }]},
-  { name: "7-String",
-    strings: [{ note: "E",
-		octave: 4 },
-	      { note: "B",
-		octave: 3 },
-	      { note: "G",
-		octave: 3 },
-	      { note: "D",
-		octave: 3 },
-	      { note: "A",
-		octave: 2 },
-	      { note: "E",
-		octave: 2 },
-	      { note: "B",
-		octave: 2 }]},
-  { name: "Standard Bass",
-    strings: [{ note: "G",
-		octave: 2 },
-	      { note: "D",
-		octave: 2 },
-	      { note: "A",
-		octave: 1 },
-	      { note: "E",
-		octave: 1 }]}
-];
-
-interface PitchClass {
+export interface PitchClass {
     name : string;
     id : number;
 }
 
-interface Note {
-    class : PitchClass;
+export interface Note {
+    pitch : PitchClass;
     octave : number;
+}
+
+export interface Tuning {
+    name : string;
+    strings : Array<Note> 
+}
+
+export interface NoteMarker {
+    fret: number;
+    string: Note;
+    note: Note;
+    id: string;
 }
 
 var tones = {
@@ -69,6 +27,65 @@ var tones = {
     flats  : ["A","B♭","B","C","D♭","D","E♭","E","F","G♭","G","A♭"]
   }
 };
+
+var tunings : Array<Tuning> = [
+  { name: "Standard",
+    strings: [{ pitch: "E",
+		octave: 4 },
+	      { pitch: "B",
+		octave: 3 },
+	      { pitch: "G",
+		octave: 3 },
+	      { pitch: "D",
+		octave: 3 },
+	      { pitch: "A",
+		octave: 2 },
+	      { pitch: "E",
+		octave: 2 }]},
+  { name: "Drop D",
+    strings: [{ pitch: "E",
+		octave: 4 },
+	      { pitch: "B",
+		octave: 3 },
+	      { pitch: "G",
+		octave: 3 },
+	      { pitch: "D",
+		octave: 3 },
+	      { pitch: "A",
+		octave: 2 },
+	      { pitch: "D",
+		octave: 2 }]},
+  { name: "7-String",
+    strings: [{ pitch: "E",
+		octave: 4 },
+	      { pitch: "B",
+		octave: 3 },
+	      { pitch: "G",
+		octave: 3 },
+	      { pitch: "D",
+		octave: 3 },
+	      { pitch: "A",
+		octave: 2 },
+	      { pitch: "E",
+		octave: 2 },
+	      { pitch: "B",
+		octave: 2 }]},
+  { name: "Standard Bass",
+    strings: [{ pitch: "G",
+		octave: 2 },
+	      { pitch: "D",
+		octave: 2 },
+	      { pitch: "A",
+		octave: 1 },
+	      { pitch: "E",
+		octave: 1 }]}
+].map((t) => {return {
+    name: t.name,
+    strings: t.strings.map((s) => {return {
+        pitch: getPitchClassByName(s.pitch),
+        octave: s.octave
+    }})
+}});
 
 //holds semitonal degrees used for each scale starting from the root
 var scales = {
@@ -84,24 +101,23 @@ function getPitchClasses() : Array<PitchClass> {
 
 function getPitchClassById(n : number) : PitchClass {
     //Assume that ids are unique
-    return getPitchClasses().filter((pitch) => {return pitch.id === n}).pop()
+    return getPitchClasses().filter((pitch) => {return pitch.id === n}).shift()
 };
 
 function getPitchClassByName(n : string) : PitchClass {
     //Assume that ids are unique
-    return getPitchClasses().filter((pitch) => {return pitch.name === n}).pop()
+    return getPitchClasses().filter((pitch) => {return pitch.name === n}).shift()
 };
 
-export default {
-  getFrets(s,e) {
+function getFrets(s,e) {
     var frets = [];
     for(var i = s; i <= e; i++){
       frets.push({n: i});
     }
     return frets;
-  },
+  }
 
-  getFretMarkers(s,e) {
+  function getFretMarkers(s,e) {
     var markers = [];
     for(var i = s; i <= e; i++){
       if(i > 1 && i % 2 == 1 && (i+1) % 12 != 0 && (i-1) % 12 != 0){
@@ -119,58 +135,88 @@ export default {
       }
     }
     return markers;
-  },
+  }
 
 
-  getNoteMarkers(string, s, e) {
+  function getNoteMarkers(string : Note, s, e) : Array<NoteMarker> {
     let pitchClasses = getPitchClasses();
-    var markers = []
+    var markers : Array<NoteMarker> = []
     for(var i = s; i <= e; i++){
-      console.log("Fret " + i)
       markers.push({fret: i,
 		    //TODO: make this string id
 		    string: string,
             //Assumes that markers are one pitch class away from eachother
-		    note: getPitchClassById(getPitchClassByName(string.note).id + i % pitchClasses.length)
+		    note: {pitch: getPitchClassById((string.pitch.id + i) % pitchClasses.length),
+                   octave: string.octave + Math.floor(i / 12)},
+            id: ""
     })}
     return markers
-  },
+  }
 
-  getDefaultTuning() {
+  function getDefaultTuning() {
     return this.getTuning("Standard");
-  },
+  }
 
-  getStrings(tuning) {
+  function getStrings(tuning) {
     return tunings.filter( (value) => value.name === tuning.name )[0].strings;
-  },
+  }
 
-  getTunings() {
+  function getTunings() {
     return tunings;
-  },
+  }
 
-  getTuning(tuningName) {
+  function getTuning(tuningName) {
     return tunings.filter( (value) => value.name === tuningName )[0];
-  },
+  }
 
-  getKeys() {
+  function getKeys() {
     return getPitchClasses()
-  },
+  }
 
-  getKey(id) {
+  function getKey(id) {
     return getPitchClassById(id)
-  },
+  }
 
-  getModInterval(base_note : Note, interval_note : Note) {
+  function getModInterval(note_one : Note, note_two : Note) : number {
     let lengthPitchClasses = getPitchClasses.length
-    return (interval_note.class.id + lengthPitchClasses - base_note.class.id) % 12
-  },
-
-  getDivInterval(base_note : Note, interval_note : Note) {
+    return getInterval(note_one, note_two) % lengthPitchClasses
+  }
+  
+  function getInterval(note_one : Note, note_two : Note) : number {
     let lengthPitchClasses = getPitchClasses.length
-    return interval_note.octave - base_note.octave
-  },
+    return Math.abs(((note_one.octave * lengthPitchClasses) + note_one.pitch.id) -
+                    ((note_two.octave * lengthPitchClasses) + note_two.pitch.id))
+  }
 
-  isIntervalInScale(interval, scale = scales.Major) {
+  function getDivInterval(note_one : Note, note_two : Note) {
+    return Math.floor(getInterval(note_one, note_two) / 12)
+  }
+
+  function isIntervalInScale(interval, scale = scales.Major) {
     return scale.filter((n) => interval === n).length > 0
   }
+  
+  function isPitchInScale(key : PitchClass, pitch : PitchClass, scale = scales.Major) {
+    let interval = (pitch.id + 12 - key.id) % 12
+    return scale.filter((n) => n === interval).length > 0
+  }
+
+export default {
+    getPitchClasses,
+    getPitchClassById,
+    getPitchClassByName,
+    getFrets,
+    getFretMarkers,
+    getNoteMarkers,
+    getDefaultTuning,
+    getTunings,
+    getTuning,
+    getStrings,
+    getKeys,
+    getKey,
+    getModInterval,
+    getInterval,
+    getDivInterval,
+    isIntervalInScale,
+    isPitchInScale,
 };

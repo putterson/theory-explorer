@@ -1,4 +1,4 @@
-import { connect } from 'react-redux'
+var connect = require('react-redux').connect
 import { setKey } from '../actions'
 
 import KeySelector from '../components/KeySelector'

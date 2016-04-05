@@ -23,13 +23,17 @@
     "electron-reload": "^0.2.0",
     "redux-devtools": "^3.1.1",
     "svg-to-jsx": "0.0.13",
+    "tsify": "^0.14.1",
+    "typescript": "^1.8.9",
+    "typings": "^0.7.9",
     "uglifyify": "^3.0.1",
     "watchify": "^3.7.0"
   },
   "scripts": {
-    "start": "watchify -t [ babelify --presets [ es2015 react ] ] index.js -o js/bundle.js --debug -d -v",
-    "build": "browserify -t [ babelify --presets [ es2015 react ] ] index.js -o js/bundle.js --debug",
-    "release": "browserify -t [ babelify --presets [ es2015 react ] ] -g uglifyify index.js -o js/bundle.js",
+    "start": "watchify index.tsx typings/main.d.ts -p tsify -o js/bundle.js --debug -d -v",
+    "build": "browserify index.tsx typings/main.d.ts -p tsify -o js/bundle.js --debug",
+    "release": "browserify index.tsx typings/main.d.ts -p tsify -g uglifyify -o js/bundle.js",
     "electron": "electron main.js"
   }
 }
+

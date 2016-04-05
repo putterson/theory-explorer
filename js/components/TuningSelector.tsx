@@ -1,9 +1,9 @@
-import React, { PropTypes } from 'react'
+import * as React from 'react'
 
 const TuningSelector = ({ onTuningSelect, tunings, currentTuning }) => (
   <select
      value={currentTuning.name}
-     onChange={({target: {value}}) => {onTuningSelect(value);}}>
+     onChange={({target: trgt}) => {onTuningSelect(trgt['value']);}}>
     {tunings.map(function(tuning) {
       return <option key={tuning.name}
       value={tuning.name}>

@@ -43,8 +43,6 @@ const visibleNoteMarkerSelector = createSelector(
 	.map((marker) =>
 	     {(marker['id'] = Board.getInterval( {pitch: key, octave: 0} ,marker.note) + "-" +
                           string.pitch.name+string.octave);
-	      console.log(marker['id']);
-          console.log(marker.note.pitch.name+marker.note.octave)
 	      return marker})
     }
     

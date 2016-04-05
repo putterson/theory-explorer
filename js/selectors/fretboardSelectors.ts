@@ -41,8 +41,10 @@ const visibleNoteMarkerSelector = createSelector(
       return Board.getNoteMarkers(string, viewhints.fret_start, viewhints.fret_end)
 	.filter((marker) => {return Board.isPitchInScale(key, marker.note.pitch)})
 	.map((marker) =>
-	     {(marker['id'] = Board.getInterval(string,marker.note) + "");
+	     {(marker['id'] = Board.getInterval( {pitch: key, octave: 0} ,marker.note) + "-" +
+                          string.pitch.name+string.octave);
 	      console.log(marker['id']);
+          console.log(marker.note.pitch.name+marker.note.octave)
 	      return marker})
     }
     

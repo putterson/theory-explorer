@@ -147,7 +147,7 @@ function getFrets(s,e) {
 		    string: string,
             //Assumes that markers are one pitch class away from eachother
 		    note: {pitch: getPitchClassById((string.pitch.id + i) % pitchClasses.length),
-                   octave: string.octave + Math.floor(i / 12)},
+                   octave: string.octave + Math.floor((i + string.pitch.id) / 12)},
             id: ""
     })}
     return markers
@@ -183,9 +183,11 @@ function getFrets(s,e) {
   }
   
   function getInterval(note_one : Note, note_two : Note) : number {
-    let lengthPitchClasses = getPitchClasses.length
-    return Math.abs(((note_one.octave * lengthPitchClasses) + note_one.pitch.id) -
-                    ((note_two.octave * lengthPitchClasses) + note_two.pitch.id))
+    let lengthPitchClasses = getPitchClasses().length
+    let p1 = ((note_one.octave * lengthPitchClasses) + note_one.pitch.id)
+    let p2 =  ((note_two.octave * lengthPitchClasses) + note_two.pitch.id)
+    return Math.abs( p1 - p2 )
+                   
   }
 
   function getDivInterval(note_one : Note, note_two : Note) {

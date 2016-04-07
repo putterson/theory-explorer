@@ -7,3 +7,7 @@ export const setTuning = (name) => {
 export const setKey = (id) => {
   return { type: types.SET_KEY, id: id}
 }
+
+export const setScale = (id) => {
+  return { type: types.SET_SCALE, id: id}
+}

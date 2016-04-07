@@ -1,5 +1,5 @@
 const { createSelector, createStructuredSelector } = require('reselect')
-import Board, {Tuning, Note, PitchClass} from '../stores/Board';
+import Board, {Tuning, Note, PitchClass, Scale} from '../stores/Board';
 
 interface NoteMarker {
     
@@ -10,6 +10,7 @@ let flatMap = (arr : Array<any>, lambda) => Array.prototype.concat.apply([], arr
 const viewhintSelector = state => state.viewhints
 const tuningSelector = state => state.tuning
 const keySelector = state => state.key
+const scaleSelector = state => state.scale
 
 const visibleFretSelector = createSelector(
   viewhintSelector,
@@ -35,11 +36,12 @@ const visibleStringSelector = createSelector(
 const visibleNoteMarkerSelector = createSelector(
   tuningSelector,
   keySelector,
+  scaleSelector,
   viewhintSelector,
-  (tuning: Tuning, key : PitchClass, viewhints) : Array<NoteMarker> => {
+  (tuning: Tuning, key : PitchClass, scale : Scale, viewhints) : Array<NoteMarker> => {
     var getNoteMarkersInRange = (string : Note) => {
       return Board.getNoteMarkers(string, viewhints.fret_start, viewhints.fret_end)
-	.filter((marker) => {return Board.isPitchInScale(key, marker.note.pitch)})
+	.filter((marker) => {return Board.isPitchInScale(key, marker.note.pitch, scale)})
 	.map((marker) =>
 	     {(marker['id'] = Board.getInterval( {pitch: key, octave: 0} ,marker.note) + "-" +
                           string.pitch.name+string.octave);

@@ -2,18 +2,18 @@ var connect = require('react-redux').connect
 import { setTuning } from '../actions'
 
 import Tuning_ from '../components/Tuning'
-import TuningSelector_ from '../components/TuningSelector'
+import DropdownSelector from '../components/DropdownSelector'
 
 const mapStateToProps = (state) => {
   return {
-    currentTuning: state.tuning,
-    tunings: state.tunings
+    currentOption: state.tuning,
+    options: state.tunings
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onTuningSelect: (id) => {
+    onSelect: (id) => {
       dispatch(setTuning(id))
     }
   }
@@ -23,7 +23,7 @@ const mapDispatchToProps = (dispatch) => {
 export const TuningSelector = connect(
   mapStateToProps,
   mapDispatchToProps
-)(TuningSelector_)
+)(DropdownSelector)
 
 export const Tuning = connect(
   mapStateToProps,

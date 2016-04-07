@@ -1,7 +1,7 @@
 import * as React from 'react'
 
-const Tuning = ({ currentTuning }) => (
-  <p>{"Tuning is " + currentTuning.name }</p>
+const Tuning = ({ currentOption }) => (
+  <p>{"Tuning is " + currentOption.name }</p>
 )
 
 export default Tuning

@@ -2,6 +2,7 @@ import * as React from 'react'
 
 const TuningSelector = ({ onTuningSelect, tunings, currentTuning }) => (
   <select
+     className="form-control"
      value={currentTuning.name}
      onChange={({target: trgt}) => {onTuningSelect(trgt['value']);}}>
     {tunings.map(function(tuning) {

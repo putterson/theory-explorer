@@ -8,6 +8,11 @@ export interface Note {
     octave : number;
 }
 
+export interface Scale {
+    name: string;
+    degrees: Array<number>;
+}
+
 export interface Tuning {
     name : string;
     strings : Array<Note> 
@@ -88,11 +93,14 @@ var tunings : Array<Tuning> = [
 }});
 
 //holds semitonal degrees used for each scale starting from the root
-var scales = {
-  "Pentatonic"    : [0,2,4,7,9],
-  "Major"         : [0,2,4,5,7,9,11],
-  "Natural Minor" : [0,2,3,5,7,8,10]
-};
+var scales : Array<Scale> = [
+    { name : "Pentatonic",
+      degrees: [0,2,4,7,9]},
+    { name : "Major",
+      degrees : [0,2,4,5,7,9,11]},
+    { name : "Natural Minor",
+      degrees : [0,2,3,5,7,8,10]}
+];
 
   
 function getPitchClasses() : Array<PitchClass> {
@@ -194,13 +202,21 @@ function getFrets(s,e) {
     return Math.floor(getInterval(note_one, note_two) / 12)
   }
 
-  function isIntervalInScale(interval, scale = scales.Major) {
-    return scale.filter((n) => interval === n).length > 0
+  function isIntervalInScale(interval : number, scale : Scale) {
+    return scale.degrees.filter((n) => interval === n).length > 0
   }
   
-  function isPitchInScale(key : PitchClass, pitch : PitchClass, scale = scales.Major) {
+  function isPitchInScale(key : PitchClass, pitch : PitchClass, scale : Scale) {
     let interval = (pitch.id + 12 - key.id) % 12
-    return scale.filter((n) => n === interval).length > 0
+    return scale.degrees.filter((n) => n === interval).length > 0
+  }
+  
+  function getScale(name : string) {
+      return getScales().filter((s) => s.name === name)[0]
+  }
+  
+  function getScales() : Array<Scale> {
+      return scales
   }
 
 export default {
@@ -221,4 +237,6 @@ export default {
     getDivInterval,
     isIntervalInScale,
     isPitchInScale,
+    getScale,
+    getScales
 };

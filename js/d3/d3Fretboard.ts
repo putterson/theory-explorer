@@ -206,9 +206,13 @@ fretboard._drawStringNoteMarkers = function(el, dim, markers : any, strings : Ar
   var nstrings = strings.length;
   
   var marker = g.selectAll('circle')
+  .classed('selected', function(d,i) { return d.selected })
+  .classed('selectable', function(d,i) { return d.selectable })
 	.data(markers, function(m : any,i) {return m.id});
 
-  marker
+  marker  
+    .classed('selected', function(d,i) { return d.selected })
+    .classed('selectable', function(d,i) { return d.selectable })
     .transition()
     .duration(ANIMATION_DURATION)
     .attr('cx', dim.getNoteMarkerPosition())
@@ -221,6 +225,8 @@ fretboard._drawStringNoteMarkers = function(el, dim, markers : any, strings : Ar
 
   marker.enter().append('circle')
     .attr('opacity', 0)
+    .classed('selected', function(d,i) { return d.selected })
+    .classed('selectable', function(d,i) { return d.selectable })
     // .on('click', function () {
       
     // })
@@ -254,7 +260,7 @@ fretboard._drawStringNoteMarkerText = function(el,dim,markers : Array<NoteMarker
     .attr("font-family", "Monospace")
     .attr("font-size", 12)
     .attr("text-anchor", "middle")
-    .attr("alignment-baseline", "middle")
+    .attr("dominant-baseline", "middle")
     .text( function(d : NoteMarker ,i) { return d.note.pitch.name });
 
   note.enter().append('text')
@@ -265,7 +271,7 @@ fretboard._drawStringNoteMarkerText = function(el,dim,markers : Array<NoteMarker
     .attr("font-family", "Monospace")
     .attr("font-size", 12)
     .attr("text-anchor", "middle")
-    .attr("alignment-baseline", "middle")
+    .attr("dominant-baseline", "middle")
     .text( function(d : NoteMarker ,i) { return d.note.pitch.name });
 
   note.exit()

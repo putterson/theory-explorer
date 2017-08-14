@@ -13,6 +13,11 @@ export interface Scale {
     degrees: Array<number>;
 }
 
+export interface Chord {
+  name: string;
+  formula: Array<number>
+}
+
 export interface Tuning {
     name : string;
     strings : Array<Note> 
@@ -23,6 +28,8 @@ export interface NoteMarker {
     string: Note;
     note: Note;
     id: string;
+    selected: boolean;
+    selectable: boolean;
 }
 
 var tones = {
@@ -102,6 +109,15 @@ var scales : Array<Scale> = [
       degrees : [0,2,3,5,7,8,10]}
 ];
 
+var chords: Array<Chord> = [
+  {
+    name: "Major",
+    formula: [0, 3, 5]
+  },
+  { name: "Minor",
+    formula: [0, 2, 5]}
+]
+
   
 function getPitchClasses() : Array<PitchClass> {
   return tones.names.sharps.map((name, i) => {return {name: name, id: i}})
@@ -146,18 +162,24 @@ function getFrets(s,e) {
   }
 
 
-  function getNoteMarkers(string : Note, s, e) : Array<NoteMarker> {
+  function getNoteMarkers(string: Note, s, e): Array<NoteMarker> {
     let pitchClasses = getPitchClasses();
-    var markers : Array<NoteMarker> = []
-    for(var i = s; i <= e; i++){
-      markers.push({fret: i,
-		    //TODO: make this string id
-		    string: string,
-            //Assumes that markers are one pitch class away from eachother
-		    note: {pitch: getPitchClassById((string.pitch.id + i) % pitchClasses.length),
-                   octave: string.octave + Math.floor((i + string.pitch.id) / 12)},
-            id: ""
-    })}
+    var markers: Array<NoteMarker> = []
+    for (var i = s; i <= e; i++) {
+      markers.push({
+        fret: i,
+        //TODO: make this string id
+        string: string,
+        //Assumes that markers are one pitch class away from eachother
+        note: {
+          pitch: getPitchClassById((string.pitch.id + i) % pitchClasses.length),
+          octave: string.octave + Math.floor((i + string.pitch.id) / 12)
+        },
+        id: "",
+        selected: false,
+        selectable: true
+      })
+    }
     return markers
   }
 

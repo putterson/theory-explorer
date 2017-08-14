@@ -1,3 +1,5 @@
 export const SET_TUNING = 'SET_TUNING'
 export const SET_KEY = 'SET_KEY'
+export const SET_CHORD = 'SET_CHORD'
 export const SET_SCALE = 'SET_SCALE'
+export const SET_MODE = 'SET_MODE'

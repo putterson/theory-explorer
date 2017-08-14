@@ -221,6 +221,9 @@ fretboard._drawStringNoteMarkers = function(el, dim, markers : any, strings : Ar
 
   marker.enter().append('circle')
     .attr('opacity', 0)
+    // .on('click', function () {
+      
+    // })
     .transition()
     .duration(ANIMATION_DURATION)
     .attr('cx', dim.getNoteMarkerPosition())

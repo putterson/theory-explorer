@@ -1,9 +1,5 @@
 const { createSelector, createStructuredSelector } = require('reselect')
-import Board, {Tuning, Note, PitchClass, Scale} from '../stores/Board';
-
-interface NoteMarker {
-    
-}
+import Board, {Tuning, Note, PitchClass, Scale, NoteMarker} from '../stores/Board';
 
 let flatMap = (arr : Array<any>, lambda) => Array.prototype.concat.apply([], arr.map(lambda)); 
 
@@ -11,6 +7,7 @@ const viewhintSelector = state => state.viewhints
 const tuningSelector = state => state.tuning
 const keySelector = state => state.key
 const scaleSelector = state => state.scale
+const modeSelector = state => state.mode
 
 const visibleFretSelector = createSelector(
   viewhintSelector,
@@ -57,7 +54,8 @@ const visibleFretboardSelector = createStructuredSelector({
   fretmarkers: visibleFretMarkerSelector,
   notemarkers: visibleNoteMarkerSelector,
   strings: visibleStringSelector,
-  viewhints: viewhintSelector
+  viewhints: viewhintSelector,
+  mode: modeSelector
 })
 
 

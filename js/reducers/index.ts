@@ -6,6 +6,7 @@ import keys from './keys'
 import scale from './scale'
 import scales from './scales'
 import viewhints from './viewhints'
+import mode from './mode'
 
 const explorerApp = combineReducers({
   tuning,
@@ -14,7 +15,8 @@ const explorerApp = combineReducers({
   keys,
   scale,
   scales,
-  viewhints
+  viewhints,
+  mode
 })
 
 export default explorerApp

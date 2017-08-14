@@ -177,11 +177,7 @@ fretboard._drawStringNotes = function(el, dim, strings: Array<Note>) {
     .duration(ANIMATION_DURATION)
     .attr('x', function(d,i) {return alignx(dim.lpad / 3);})
     .attr('y', function(d,i) {return aligny(i*(dim.bheight/(nstrings - 1)) + dim.tpad);})
-    .attr("fill", "#000000")
-    .attr("font-family", "Monospace")
-    .attr("font-size", 10)
-    .attr("text-anchor", "middle")
-    .attr("alignment-baseline", "middle")
+
     .text( function(d : Note,i) { return d.pitch.name+d.octave; });
 
   note.enter().append('text')
@@ -189,11 +185,6 @@ fretboard._drawStringNotes = function(el, dim, strings: Array<Note>) {
     .duration(ANIMATION_DURATION)
     .attr('x', function(d,i) {return alignx(dim.lpad / 3);})
     .attr('y', function(d,i) {return aligny(i*(dim.bheight/(nstrings - 1)) + dim.tpad);})
-    .attr("fill", "#000000")
-    .attr("font-family", "Monospace")
-    .attr("font-size", 10)
-    .attr("text-anchor", "middle")
-    .attr("alignment-baseline", "middle")
     .text( function(d : Note,i) { return d.pitch.name+d.octave; });
 
   note.exit()
@@ -253,10 +244,6 @@ fretboard._drawStringNoteMarkerText = function(el,dim,markers : Array<NoteMarker
     .duration(ANIMATION_DURATION)
     .attr('x', dim.getNoteMarkerPosition())
     .attr('y', function(d,i) {return aligny(strings.indexOf(d.string)*(dim.bheight/(nstrings - 1)) + dim.tpad);})
-    .attr("font-family", "Monospace")
-    .attr("font-size", 12)
-    .attr("text-anchor", "middle")
-    .attr("dominant-baseline", "middle")
     .text( function(d : NoteMarker ,i) { return d.note.pitch.name });
 
   note.enter().append('text')
@@ -264,10 +251,6 @@ fretboard._drawStringNoteMarkerText = function(el,dim,markers : Array<NoteMarker
     .duration(ANIMATION_DURATION)
     .attr('x', dim.getNoteMarkerPosition())
     .attr('y',  function(d,i) {return aligny(strings.indexOf(d.string)*(dim.bheight/(nstrings - 1)) + dim.tpad);})
-    .attr("font-family", "Monospace")
-    .attr("font-size", 12)
-    .attr("text-anchor", "middle")
-    .attr("dominant-baseline", "middle")
     .text( function(d : NoteMarker ,i) { return d.note.pitch.name });
 
   note.exit()
@@ -331,10 +314,6 @@ fretboard._drawFretNumbers = function(el, dim, frets) {
   num
     .transition()
     .duration(ANIMATION_DURATION)
-    .attr("fill", "#000000")
-    .attr("font-family", "Monospace")
-    .attr("font-size", 10)
-    .attr("text-anchor", "middle")
     .attr("x", dim.getFretPosition())
     .attr("y", dim.tpad - 15)
     .text(function(d,i) {return d.n;});
@@ -342,10 +321,6 @@ fretboard._drawFretNumbers = function(el, dim, frets) {
   num.enter().append('text')
     .transition()
     .duration(ANIMATION_DURATION)
-    .attr("fill", "#000000")
-    .attr("font-family", "Monospace")
-    .attr("font-size", 10)
-    .attr("text-anchor", "middle")
     .attr("x", dim.getFretPosition())
     .attr("y", dim.tpad - 15)
     .text(function(d,i) {return d.n;});
@@ -432,11 +407,9 @@ fretboard.destroy = function(el) {
 function alignx(x){
   return x - (x % 1);
 }
-//this.alignon = alignx;
 
 function aligny(x){
   return x - (x % 1) + 0.5;
 }
-//this.alignin = aligny;
 
 export default fretboard;

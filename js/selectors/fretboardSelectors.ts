@@ -38,7 +38,7 @@ const visibleNoteMarkerSelector = createSelector(
   (tuning: Tuning, key : PitchClass, scale : Scale, viewhints) : Array<NoteMarker> => {
     var getNoteMarkersInRange = (string : Note) => {
       return Board.getNoteMarkers(string, viewhints.fret_start, viewhints.fret_end)
-	.filter((marker) => {return Board.isPitchInScale(key, marker.note.pitch, scale)})
+	// .filter((marker) => {return Board.isPitchInScale(key, marker.note.pitch, scale)})
 	.map((marker) =>
 	     {(marker['id'] = Board.getInterval( {pitch: key, octave: 0} ,marker.note) + "-" +
                           string.pitch.name+string.octave);

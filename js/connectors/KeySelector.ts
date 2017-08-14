@@ -8,7 +8,7 @@ import RadioButtonSelector, { RadioButtonSelectorState, RadioButtonSelectorDispa
 
 let mapStateToProps : (state : any) => RadioButtonSelectorState = function (state) {
   return {
-    selectedButton: state.key,
+    selectedButton: state.key.name,
     buttons: state.keys
   }
 }

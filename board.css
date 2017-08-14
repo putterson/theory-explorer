@@ -1,0 +1,9 @@
+.selected {
+    fill: #FFAADD;
+    fill-opacity: 0.8
+}
+
+.selectable {
+    fill: black;
+    fill-opacity: 0.1;
+}

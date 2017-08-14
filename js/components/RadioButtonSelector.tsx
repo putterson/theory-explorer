@@ -8,7 +8,7 @@ export interface Button {
 
 export interface RadioButtonSelectorState {
     buttons : Array<Button>,
-    selectedButton : PitchClass
+    selectedButton : string//PitchClass
 }
 
 export interface RadioButtonSelectorDispatch {
@@ -21,7 +21,7 @@ const RadioButtonSelector = ({ onButtonSelect, buttons, selectedButton } : Radio
     {buttons.map(function(button : Button){
       return <button
       type="button"
-      className={"btn btn-default" + (button.name === selectedButton.name ? 'active' : '')}
+      className={"btn btn-default" + (button.name === selectedButton ? 'active' : '')}
       key={button.id}
       id={button.id}
       onClick={onButtonSelect.bind(this, button.id)}>

@@ -176,8 +176,8 @@ function getFrets(s,e) {
           octave: string.octave + Math.floor((i + string.pitch.id) / 12)
         },
         id: "",
-        selected: false,
-        selectable: true
+        selected: true,
+        selectable: false
       })
     }
     return markers

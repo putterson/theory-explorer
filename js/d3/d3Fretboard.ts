@@ -218,8 +218,6 @@ fretboard._drawStringNoteMarkers = function(el, dim, markers : any, strings : Ar
     .attr('cx', dim.getNoteMarkerPosition())
     .attr('cy', function(d ,i) {return aligny(strings.indexOf(d.string)*(dim.bheight/(nstrings - 1)) + dim.tpad);})
     .attr('r', dim.notemarkerRadius)
-    .attr("fill", "#FFAADD")
-    .attr('fill-opacity', 0.8)
     .attr('stroke', '#000000');
   
 
@@ -236,8 +234,6 @@ fretboard._drawStringNoteMarkers = function(el, dim, markers : any, strings : Ar
     .attr('cy', function(d,i) {return aligny(strings.indexOf(d.string)*(dim.bheight/(nstrings - 1)) + dim.tpad);})
     .attr('r', dim.notemarkerRadius)
     .attr('opacity', 1)
-    .attr("fill", "#FFAADD")
-    .attr('fill-opacity', 0.8)
     .attr('stroke', '#000000');
 
   marker.exit()

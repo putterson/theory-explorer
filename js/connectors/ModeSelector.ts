@@ -9,7 +9,7 @@ import RadioButtonSelector, { RadioButtonSelectorState, RadioButtonSelectorDispa
 
 let mapStateToProps: (state: any) => RadioButtonSelectorState = function (state) {
   return {
-    selectedButton: state.mode,
+    selectedButton: AppMode[state.mode],
     buttons: Object
       .keys(AppMode)
       .filter(key => isNaN(parseInt(key, 10))) // Only take the string keys, not the numeric value ones

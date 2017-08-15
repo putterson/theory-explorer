@@ -29,7 +29,6 @@ export interface NoteMarker {
     note: Note;
     id: string;
     selected: boolean;
-    selectable: boolean;
 }
 
 var tones = {
@@ -176,8 +175,7 @@ function getFrets(s,e) {
           octave: string.octave + Math.floor((i + string.pitch.id) / 12)
         },
         id: "",
-        selected: true,
-        selectable: false
+        selected: false,
       })
     }
     return markers

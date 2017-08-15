@@ -8,7 +8,7 @@ export interface Button {
 
 export interface RadioButtonSelectorState {
     buttons : Array<Button>,
-    selectedButton : string//PitchClass
+    selectedButton : string
 }
 
 export interface RadioButtonSelectorDispatch {

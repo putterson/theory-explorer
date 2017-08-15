@@ -1,4 +1,4 @@
-import * as types from '../constants/ActionTypes'
+import * as types from '../actions/ActionTypes'
 
 export enum AppMode {
     Scales,

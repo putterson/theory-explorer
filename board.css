@@ -1,19 +1,20 @@
+.d3-note-markers {
+    fill: #BBBBBB;
+    fill-opacity: 0.8;
+}
+
+.d3-note-markers > :hover {
+    fill: #FFDAF0;
+    fill-opacity: 0.8;
+}
+
 .selected {
     fill: #FFAADD;
     fill-opacity: 0.8;
 }
 
 .selected:hover {
-    fill: #BBBBBB;
-    fill-opacity: 0.8;
-}
-
-.selectable {
-    fill: #BBBBBB;
-    fill-opacity: 0.8;
-}
-
-.selectable:hover {
+    stroke-width: 2px;
     fill: #FFAADD;
     fill-opacity: 0.8;
 }

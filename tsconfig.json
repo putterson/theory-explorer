@@ -3,7 +3,8 @@
     "module": "commonjs",
     "jsx": "react",
     "sourceMap": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "target": "es6"
   },
   "files": [
     "./typings/main.d.ts",

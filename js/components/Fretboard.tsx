@@ -2,6 +2,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 
+import { toggleSelectNote } from '../actions'
 import d3Fretboard from '../d3/d3Fretboard'
 import visibleFretboardSelector from '../selectors/fretboardSelectors'
 
@@ -31,8 +32,12 @@ var fretboard = React.createClass({
   }  
 })
 
-const mapDispatchToProps = (dispatch) => {
-  return {}
+let mapDispatchToProps : (dispatch : any) => any = function (dispatch) {
+  return {
+    onSelectNote: (id, selected) => {
+      dispatch(toggleSelectNote(id, selected))
+    }
+  }
 }
 
 const Fretboard = connect(

@@ -13,7 +13,7 @@ fretboard.create = function(el, props) {
   var svg = d3.select(el).append('svg')
 	.attr('class', 'd3-fretboard')
 	.attr('width', props.viewhints.width)
-	.attr('height', props.viewhints.height);
+  .attr('height', props.viewhints.height);
 
 
   svg.append('g')
@@ -110,7 +110,7 @@ fretboard.update = function(el, state, dispatcher) {
   this._drawFretMarkers(el, dimentions, state.fretmarkers);
   this._drawStrings(el, dimentions, state.strings);
   this._drawStringNotes(el, dimentions, state.strings);
-  this._drawStringNoteMarkers(el, dimentions, state.notemarkers, state.strings);
+  this._drawStringNoteMarkers(el, dimentions, state.notemarkers, state.strings, state.onSelectNote);
   this._drawStringNoteMarkerText(el, dimentions, state.notemarkers, state.strings);
 };
 
@@ -191,7 +191,7 @@ fretboard._drawStringNotes = function(el, dim, strings: Array<Note>) {
     .remove();
 };
 
-fretboard._drawStringNoteMarkers = function(el, dim, markers : any, strings : Array<Note>) {
+fretboard._drawStringNoteMarkers = function(el, dim, markers : any, strings : Array<Note>, onSelectNote : Function) {
   var g = d3.select(el).selectAll('.d3-note-markers');
 
   var nstrings = strings.length;
@@ -216,9 +216,9 @@ fretboard._drawStringNoteMarkers = function(el, dim, markers : any, strings : Ar
     .attr('opacity', 0)
     .classed('selected', function(d,i) { return d.selected })
     .classed('selectable', function(d,i) { return d.selectable })
-    // .on('click', function () {
-      
-    // })
+    .on('click', function (d, i) {
+      onSelectNote(d.id, d.selected)
+    })
     .transition()
     .duration(ANIMATION_DURATION)
     .attr('cx', dim.getNoteMarkerPosition())
